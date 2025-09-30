@@ -94,26 +94,31 @@ export class TrackingRecorder {
   }
 
   drawLandmarks(poseResults, faceResults) {
-    // Draw pose landmarks
+    // Draw pose landmarks - ensure full body is visible
     if (poseResults.landmarks?.[0]) {
       const landmarks = poseResults.landmarks[0];
       
       this.ctx.fillStyle = '#00ff00';
+      this.ctx.strokeStyle = '#00ff00';
+      this.ctx.lineWidth = 3;
+      
+      // Draw all landmarks with larger visibility
       landmarks.forEach(landmark => {
         const x = landmark.x * this.canvas.width;
         const y = landmark.y * this.canvas.height;
         this.ctx.beginPath();
-        this.ctx.arc(x, y, 5, 0, 2 * Math.PI);
+        this.ctx.arc(x, y, 6, 0, 2 * Math.PI);
         this.ctx.fill();
       });
 
-      // Draw connections
-      this.ctx.strokeStyle = '#00ff00';
-      this.ctx.lineWidth = 2;
+      // Draw connections with improved visibility
       const connections = [
         [11, 13], [13, 15], [12, 14], [14, 16], // Arms
+        [15, 17], [15, 19], [15, 21], // Left hand
+        [16, 18], [16, 20], [16, 22], // Right hand
         [11, 12], [11, 23], [12, 24], [23, 24], // Torso
-        [23, 25], [25, 27], [24, 26], [26, 28]  // Legs
+        [23, 25], [25, 27], [27, 29], [29, 31], // Left leg
+        [24, 26], [26, 28], [28, 30], [30, 32]  // Right leg
       ];
       
       connections.forEach(([i, j]) => {
@@ -128,14 +133,14 @@ export class TrackingRecorder {
       });
     }
 
-    // Draw face landmarks
+    // Draw face landmarks - ensure all facial features are visible
     if (faceResults.faceLandmarks?.[0]) {
       this.ctx.fillStyle = '#ff00ff';
       faceResults.faceLandmarks[0].forEach(landmark => {
         const x = landmark.x * this.canvas.width;
         const y = landmark.y * this.canvas.height;
         this.ctx.beginPath();
-        this.ctx.arc(x, y, 1, 0, 2 * Math.PI);
+        this.ctx.arc(x, y, 2, 0, 2 * Math.PI);
         this.ctx.fill();
       });
     }
