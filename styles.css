@@ -352,18 +352,55 @@ input[type="file"] {
 }
 
 .toggle-label input[type="checkbox"] {
-  width: 20px;
-  height: 20px;
-  min-width: 20px;
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
   cursor: pointer;
   accent-color: #fff;
   -webkit-tap-highlight-color: transparent;
   margin: 0;
   flex-shrink: 0;
+  position: relative;
+  appearance: none;
+  -webkit-appearance: none;
+  border: 2px solid #666;
+  border-radius: 4px;
+  background: #222;
+  transition: all 0.2s;
 }
 
-.toggle-label span {
-  font-weight: 700;
+.toggle-label input[type="checkbox"]:checked {
+  background: #fff;
+  border-color: #fff;
+}
+
+.toggle-label input[type="checkbox"]:checked::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #000;
+  font-size: 18px;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.toggle-label input[type="checkbox"]:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+@media (min-width: 768px) {
+  .toggle-label input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+  }
+  
+  .toggle-label input[type="checkbox"]:checked::after {
+    font-size: 16px;
+  }
 }
 
 .setting-description {
