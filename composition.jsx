@@ -16,6 +16,7 @@ const MusicVideoComposition = ({
   showOriginalVideo = true,
   showPoseTracking = true,
   showFaceTracking = true,
+  showHandTracking = true,
   showParticles = true,
   showGlow = true,
   brightness = 1.1,
@@ -107,7 +108,7 @@ const MusicVideoComposition = ({
           false,
           {
             fileName: "<stdin>",
-            lineNumber: 101,
+            lineNumber: 102,
             columnNumber: 13
           }
         );
@@ -125,13 +126,13 @@ const MusicVideoComposition = ({
         false,
         {
           fileName: "<stdin>",
-          lineNumber: 117,
+          lineNumber: 118,
           columnNumber: 11
         }
       ))
     ] }, void 0, true, {
       fileName: "<stdin>",
-      lineNumber: 93,
+      lineNumber: 94,
       columnNumber: 7
     });
   };
@@ -150,12 +151,100 @@ const MusicVideoComposition = ({
       false,
       {
         fileName: "<stdin>",
-        lineNumber: 137,
+        lineNumber: 138,
         columnNumber: 11
       }
     )) }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 135,
+      lineNumber: 136,
+      columnNumber: 7
+    });
+  };
+  const drawHandLandmarks = () => {
+    if (!showHandTracking || !currentTracking?.hands || currentTracking.hands.length === 0) return null;
+    return /* @__PURE__ */ jsxDEV("svg", { width: "540", height: "960", style: { position: "absolute", top: 0, left: 0 }, children: currentTracking.hands.map((hand, handIdx) => {
+      const connections = [
+        [0, 1],
+        [1, 2],
+        [2, 3],
+        [3, 4],
+        // Thumb
+        [0, 5],
+        [5, 6],
+        [6, 7],
+        [7, 8],
+        // Index
+        [0, 9],
+        [9, 10],
+        [10, 11],
+        [11, 12],
+        // Middle
+        [0, 13],
+        [13, 14],
+        [14, 15],
+        [15, 16],
+        // Ring
+        [0, 17],
+        [17, 18],
+        [18, 19],
+        [19, 20],
+        // Pinky
+        [5, 9],
+        [9, 13],
+        [13, 17]
+        // Palm
+      ];
+      return /* @__PURE__ */ jsxDEV("g", { children: [
+        connections.map(([i, j], idx) => {
+          const p1 = hand[i];
+          const p2 = hand[j];
+          if (!p1 || !p2) return null;
+          return /* @__PURE__ */ jsxDEV(
+            "line",
+            {
+              x1: p1.x * 540,
+              y1: p1.y * 960,
+              x2: p2.x * 540,
+              y2: p2.y * 960,
+              stroke: "#ffff00",
+              strokeWidth: "3",
+              strokeLinecap: "round",
+              opacity: "0.8"
+            },
+            `hand-${handIdx}-line-${idx}`,
+            false,
+            {
+              fileName: "<stdin>",
+              lineNumber: 176,
+              columnNumber: 19
+            }
+          );
+        }),
+        hand.map((landmark, idx) => /* @__PURE__ */ jsxDEV(
+          "circle",
+          {
+            cx: landmark.x * 540,
+            cy: landmark.y * 960,
+            r: "5",
+            fill: "#ffff00",
+            opacity: "0.9"
+          },
+          `hand-${handIdx}-joint-${idx}`,
+          false,
+          {
+            fileName: "<stdin>",
+            lineNumber: 192,
+            columnNumber: 17
+          }
+        ))
+      ] }, `hand-${handIdx}`, true, {
+        fileName: "<stdin>",
+        lineNumber: 168,
+        columnNumber: 13
+      });
+    }) }, void 0, false, {
+      fileName: "<stdin>",
+      lineNumber: 156,
       columnNumber: 7
     });
   };
@@ -175,22 +264,27 @@ const MusicVideoComposition = ({
       false,
       {
         fileName: "<stdin>",
-        lineNumber: 155,
+        lineNumber: 213,
         columnNumber: 11
       }
     ) }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 154,
+      lineNumber: 212,
       columnNumber: 9
     }),
     /* @__PURE__ */ jsxDEV(AbsoluteFill, { children: drawPoseSkeleton() }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 168,
+      lineNumber: 226,
       columnNumber: 7
     }),
     /* @__PURE__ */ jsxDEV(AbsoluteFill, { children: drawFaceLandmarks() }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 173,
+      lineNumber: 231,
+      columnNumber: 7
+    }),
+    /* @__PURE__ */ jsxDEV(AbsoluteFill, { children: drawHandLandmarks() }, void 0, false, {
+      fileName: "<stdin>",
+      lineNumber: 236,
       columnNumber: 7
     }),
     showGlow && /* @__PURE__ */ jsxDEV(
@@ -205,7 +299,7 @@ const MusicVideoComposition = ({
       false,
       {
         fileName: "<stdin>",
-        lineNumber: 179,
+        lineNumber: 242,
         columnNumber: 9
       }
     ),
@@ -225,16 +319,16 @@ const MusicVideoComposition = ({
       false,
       {
         fileName: "<stdin>",
-        lineNumber: 192,
+        lineNumber: 255,
         columnNumber: 15
       }
     )) }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 190,
+      lineNumber: 253,
       columnNumber: 11
     }) }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 189,
+      lineNumber: 252,
       columnNumber: 9
     }),
     showGlow && /* @__PURE__ */ jsxDEV(
@@ -249,18 +343,18 @@ const MusicVideoComposition = ({
       false,
       {
         fileName: "<stdin>",
-        lineNumber: 210,
+        lineNumber: 273,
         columnNumber: 9
       }
     ),
     /* @__PURE__ */ jsxDEV(Audio, { src: audioUrl }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 219,
+      lineNumber: 282,
       columnNumber: 7
     })
   ] }, void 0, true, {
     fileName: "<stdin>",
-    lineNumber: 151,
+    lineNumber: 209,
     columnNumber: 5
   });
 };

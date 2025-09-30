@@ -15,6 +15,7 @@ const App = () => {
     showOriginalVideo: true,
     showPoseTracking: true,
     showFaceTracking: true,
+    showHandTracking: true,
     showParticles: true,
     showGlow: true,
     brightness: 1.1,
@@ -48,17 +49,17 @@ const App = () => {
     /* @__PURE__ */ jsxDEV("div", { className: "header", children: [
       /* @__PURE__ */ jsxDEV("h1", { children: "Music Video Generator" }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 58,
+        lineNumber: 59,
         columnNumber: 9
       }),
       /* @__PURE__ */ jsxDEV("p", { children: "Upload music, configure settings, record yourself dancing, get an AI-enhanced music video" }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 59,
+        lineNumber: 60,
         columnNumber: 9
       })
     ] }, void 0, true, {
       fileName: "<stdin>",
-      lineNumber: 57,
+      lineNumber: 58,
       columnNumber: 7
     }),
     /* @__PURE__ */ jsxDEV(
@@ -74,7 +75,7 @@ const App = () => {
       false,
       {
         fileName: "<stdin>",
-        lineNumber: 62,
+        lineNumber: 63,
         columnNumber: 7
       }
     ),
@@ -90,7 +91,7 @@ const App = () => {
       false,
       {
         fileName: "<stdin>",
-        lineNumber: 70,
+        lineNumber: 71,
         columnNumber: 7
       }
     ),
@@ -109,7 +110,7 @@ const App = () => {
       false,
       {
         fileName: "<stdin>",
-        lineNumber: 77,
+        lineNumber: 78,
         columnNumber: 7
       }
     ),
@@ -126,18 +127,18 @@ const App = () => {
       false,
       {
         fileName: "<stdin>",
-        lineNumber: 88,
+        lineNumber: 89,
         columnNumber: 9
       }
     )
   ] }, void 0, true, {
     fileName: "<stdin>",
-    lineNumber: 56,
+    lineNumber: 57,
     columnNumber: 5
   });
 };
 createRoot(document.getElementById("app")).render(/* @__PURE__ */ jsxDEV(App, {}, void 0, false, {
   fileName: "<stdin>",
-  lineNumber: 100,
+  lineNumber: 101,
   columnNumber: 51
 }));
