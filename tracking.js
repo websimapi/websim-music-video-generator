@@ -51,7 +51,7 @@ export class TrackingRecorder {
     // Setup video recording
     const stream = this.canvas.captureStream(30);
     this.mediaRecorder = new MediaRecorder(stream, {
-      mimeType: 'video/webm;codecs=vp9',
+      mimeType: 'video/webm;codecs=vp8',
       videoBitsPerSecond: 2500000
     });
 
@@ -157,4 +157,3 @@ export class TrackingRecorder {
     });
   }
 }
-
