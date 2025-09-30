@@ -14,10 +14,14 @@ export class TrackingRecorder {
     this.recordedChunks = [];
     this.startTime = null;
     this.settings = {};
+    this.lastTimestamp = -1;
+    this.baseTimestamp = 0;
   }
 
   async initialize(settings = {}) {
     this.settings = settings;
+    this.lastTimestamp = -1;
+    this.baseTimestamp = performance.now();
     
     const vision = await FilesetResolver.forVisionTasks(
       "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.0/wasm"
@@ -71,6 +75,8 @@ export class TrackingRecorder {
     this.trackingData = [];
     this.recordedChunks = [];
     this.startTime = performance.now();
+    this.lastTimestamp = -1;
+    this.baseTimestamp = performance.now();
 
     // Setup video recording
     const stream = this.canvas.captureStream(30);
@@ -92,7 +98,14 @@ export class TrackingRecorder {
   async processFrame() {
     if (!this.isRecording) return;
 
-    const timestamp = performance.now() - this.startTime;
+    const timestamp = performance.now() - this.baseTimestamp;
+    
+    // Ensure monotonically increasing timestamps
+    if (timestamp <= this.lastTimestamp) {
+      requestAnimationFrame(() => this.processFrame());
+      return;
+    }
+    this.lastTimestamp = timestamp;
 
     // Draw video frame
     this.ctx.drawImage(this.video, 0, 0, this.canvas.width, this.canvas.height);
@@ -241,7 +254,14 @@ export class TrackingRecorder {
       this.canvas.height = this.video.videoHeight;
     }
 
-    const timestamp = performance.now();
+    const timestamp = performance.now() - this.baseTimestamp;
+    
+    // Ensure monotonically increasing timestamps
+    if (timestamp <= this.lastTimestamp) {
+      requestAnimationFrame(() => this.processPreviewFrame());
+      return;
+    }
+    this.lastTimestamp = timestamp;
 
     // Draw video frame
     this.ctx.drawImage(this.video, 0, 0, this.canvas.width, this.canvas.height);
