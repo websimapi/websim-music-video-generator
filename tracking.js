@@ -14,14 +14,16 @@ export class TrackingRecorder {
     this.recordedChunks = [];
     this.startTime = null;
     this.settings = {};
-    this.lastTimestamp = -1;
+    this.lastPoseTimestamp = 0;
+    this.lastFaceTimestamp = 0;
+    this.lastHandTimestamp = 0;
     this.baseTimestamp = 0;
+    this.previewMode = false;
   }
 
   async initialize(settings = {}) {
     this.settings = settings;
-    this.lastTimestamp = -1;
-    this.baseTimestamp = performance.now();
+    this.resetTimestamps();
     
     const vision = await FilesetResolver.forVisionTasks(
       "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.0/wasm"
@@ -70,13 +72,20 @@ export class TrackingRecorder {
     this.canvas.height = this.video.videoHeight;
   }
 
+  resetTimestamps() {
+    this.lastPoseTimestamp = 0;
+    this.lastFaceTimestamp = 0;
+    this.lastHandTimestamp = 0;
+    this.baseTimestamp = performance.now();
+  }
+
   startRecording() {
     this.isRecording = true;
+    this.previewMode = false;
     this.trackingData = [];
     this.recordedChunks = [];
     this.startTime = performance.now();
-    this.lastTimestamp = -1;
-    this.baseTimestamp = performance.now();
+    this.resetTimestamps();
 
     // Setup video recording
     const stream = this.canvas.captureStream(30);
@@ -99,44 +108,51 @@ export class TrackingRecorder {
     if (!this.isRecording) return;
 
     const timestamp = performance.now() - this.baseTimestamp;
-    
-    // Ensure monotonically increasing timestamps
-    if (timestamp <= this.lastTimestamp) {
-      requestAnimationFrame(() => this.processFrame());
-      return;
-    }
-    this.lastTimestamp = timestamp;
 
     // Draw video frame
     this.ctx.drawImage(this.video, 0, 0, this.canvas.width, this.canvas.height);
 
-    // Detect pose
-    const poseResults = this.poseLandmarker.detectForVideo(this.video, timestamp);
+    // Detect pose with proper timestamp handling
+    let poseResults = null;
+    if (timestamp > this.lastPoseTimestamp) {
+      poseResults = this.poseLandmarker.detectForVideo(this.video, timestamp);
+      this.lastPoseTimestamp = timestamp;
+    }
     
-    // Detect face
-    const faceResults = this.faceLandmarker.detectForVideo(this.video, timestamp);
+    // Detect face with proper timestamp handling
+    let faceResults = null;
+    if (timestamp > this.lastFaceTimestamp) {
+      faceResults = this.faceLandmarker.detectForVideo(this.video, timestamp);
+      this.lastFaceTimestamp = timestamp;
+    }
     
-    // Detect hands
-    const handResults = this.handLandmarker.detectForVideo(this.video, timestamp);
+    // Detect hands with proper timestamp handling
+    let handResults = null;
+    if (timestamp > this.lastHandTimestamp) {
+      handResults = this.handLandmarker.detectForVideo(this.video, timestamp);
+      this.lastHandTimestamp = timestamp;
+    }
 
     // Store tracking data
     this.trackingData.push({
       timestamp,
-      pose: poseResults.landmarks?.[0] || null,
-      face: faceResults.faceLandmarks?.[0] || null,
-      faceBlendshapes: faceResults.faceBlendshapes?.[0] || null,
-      hands: handResults.landmarks || []
+      pose: poseResults?.landmarks?.[0] || null,
+      face: faceResults?.faceLandmarks?.[0] || null,
+      faceBlendshapes: faceResults?.faceBlendshapes?.[0] || null,
+      hands: handResults?.landmarks || []
     });
 
     // Draw landmarks based on settings
-    this.drawLandmarks(poseResults, faceResults, handResults);
+    if (poseResults || faceResults || handResults) {
+      this.drawLandmarks(poseResults, faceResults, handResults);
+    }
 
     requestAnimationFrame(() => this.processFrame());
   }
 
   drawLandmarks(poseResults, faceResults, handResults) {
     // Draw pose landmarks if enabled
-    if (this.settings.showPoseTracking && poseResults.landmarks?.[0]) {
+    if (this.settings.showPoseTracking && poseResults?.landmarks?.[0]) {
       const landmarks = poseResults.landmarks[0];
       
       this.ctx.fillStyle = '#00ff00';
@@ -175,7 +191,7 @@ export class TrackingRecorder {
     }
 
     // Draw face landmarks if enabled
-    if (this.settings.showFaceTracking && faceResults.faceLandmarks?.[0]) {
+    if (this.settings.showFaceTracking && faceResults?.faceLandmarks?.[0]) {
       this.ctx.fillStyle = '#ff00ff';
       faceResults.faceLandmarks[0].forEach(landmark => {
         const x = landmark.x * this.canvas.width;
@@ -187,7 +203,7 @@ export class TrackingRecorder {
     }
 
     // Draw hand landmarks if enabled
-    if (this.settings.showHandTracking && handResults.landmarks) {
+    if (this.settings.showHandTracking && handResults?.landmarks) {
       this.ctx.fillStyle = '#ffff00';
       this.ctx.strokeStyle = '#ffff00';
       this.ctx.lineWidth = 3;
@@ -243,7 +259,19 @@ export class TrackingRecorder {
   }
   
   // Method for preview mode (non-recording)
+  startPreview() {
+    this.previewMode = true;
+    this.resetTimestamps();
+    this.processPreviewFrame();
+  }
+
+  stopPreview() {
+    this.previewMode = false;
+  }
+
   async processPreviewFrame() {
+    if (!this.previewMode) return;
+
     if (!this.video.videoWidth || !this.video.videoHeight) {
       requestAnimationFrame(() => this.processPreviewFrame());
       return;
@@ -255,34 +283,30 @@ export class TrackingRecorder {
     }
 
     const timestamp = performance.now() - this.baseTimestamp;
-    
-    // Ensure monotonically increasing timestamps
-    if (timestamp <= this.lastTimestamp) {
-      requestAnimationFrame(() => this.processPreviewFrame());
-      return;
-    }
-    this.lastTimestamp = timestamp;
 
     // Draw video frame
     this.ctx.drawImage(this.video, 0, 0, this.canvas.width, this.canvas.height);
 
-    // Detect and draw based on settings
-    if (this.settings.showPoseTracking) {
+    // Detect and draw based on settings with proper timestamp handling
+    if (this.settings.showPoseTracking && timestamp > this.lastPoseTimestamp) {
       const poseResults = this.poseLandmarker.detectForVideo(this.video, timestamp);
+      this.lastPoseTimestamp = timestamp;
       if (poseResults.landmarks?.[0]) {
         this.drawPoseOnly(poseResults.landmarks[0]);
       }
     }
     
-    if (this.settings.showFaceTracking) {
+    if (this.settings.showFaceTracking && timestamp > this.lastFaceTimestamp) {
       const faceResults = this.faceLandmarker.detectForVideo(this.video, timestamp);
+      this.lastFaceTimestamp = timestamp;
       if (faceResults.faceLandmarks?.[0]) {
         this.drawFaceOnly(faceResults.faceLandmarks[0]);
       }
     }
     
-    if (this.settings.showHandTracking) {
+    if (this.settings.showHandTracking && timestamp > this.lastHandTimestamp) {
       const handResults = this.handLandmarker.detectForVideo(this.video, timestamp);
+      this.lastHandTimestamp = timestamp;
       if (handResults.landmarks) {
         this.drawHandsOnly(handResults.landmarks);
       }

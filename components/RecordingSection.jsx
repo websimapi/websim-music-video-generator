@@ -61,10 +61,7 @@ const RecordingSection = ({
       );
       await recorderRef.current.initialize(settings);
       setStatus("Ready! Starting preview...");
-      if (previewLoopRef.current) {
-        cancelAnimationFrame(previewLoopRef.current);
-      }
-      recorderRef.current.processPreviewFrame();
+      recorderRef.current.startPreview();
       await new Promise((resolve) => setTimeout(resolve, 1e3));
       setIsInitializing(false);
       if (countdownDuration > 0) {
@@ -102,8 +99,8 @@ const RecordingSection = ({
         await countdownLoop;
         setIsCountingDown(false);
       }
-      recorderRef.current.lastTimestamp = -1;
-      recorderRef.current.baseTimestamp = performance.now();
+      recorderRef.current.stopPreview();
+      recorderRef.current.resetTimestamps();
       if (audioRef.current) {
         audioRef.current.currentTime = 0;
         await audioRef.current.play();
@@ -121,6 +118,9 @@ const RecordingSection = ({
       setStatus("Error: " + error.message);
       setIsCountingDown(false);
       setIsInitializing(false);
+      if (recorderRef.current) {
+        recorderRef.current.stopPreview();
+      }
       const stream = videoRef.current?.srcObject;
       if (stream) {
         stream.getTracks().forEach((track) => track.stop());
@@ -152,33 +152,33 @@ const RecordingSection = ({
     /* @__PURE__ */ jsxDEV("div", { className: "step-header", children: [
       /* @__PURE__ */ jsxDEV("div", { className: "step-number", children: "3" }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 198,
+        lineNumber: 199,
         columnNumber: 9
       }),
       /* @__PURE__ */ jsxDEV("h2", { children: "Record Your Dance" }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 199,
+        lineNumber: 200,
         columnNumber: 9
       })
     ] }, void 0, true, {
       fileName: "<stdin>",
-      lineNumber: 197,
+      lineNumber: 198,
       columnNumber: 7
     }),
     /* @__PURE__ */ jsxDEV("div", { className: "video-container", children: [
       /* @__PURE__ */ jsxDEV("video", { ref: videoRef, muted: true, playsInline: true }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 203,
+        lineNumber: 204,
         columnNumber: 9
       }),
       /* @__PURE__ */ jsxDEV("canvas", { ref: canvasRef }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 204,
+        lineNumber: 205,
         columnNumber: 9
       })
     ] }, void 0, true, {
       fileName: "<stdin>",
-      lineNumber: 202,
+      lineNumber: 203,
       columnNumber: 7
     }),
     /* @__PURE__ */ jsxDEV("div", { className: "recording-controls", children: !isRecording && !isCountingDown && !isInitializing ? /* @__PURE__ */ jsxDEV(
@@ -190,7 +190,7 @@ const RecordingSection = ({
         children: [
           /* @__PURE__ */ jsxDEV("span", { children: "\u25CF" }, void 0, false, {
             fileName: "<stdin>",
-            lineNumber: 214,
+            lineNumber: 215,
             columnNumber: 13
           }),
           " Start Recording"
@@ -200,16 +200,16 @@ const RecordingSection = ({
       true,
       {
         fileName: "<stdin>",
-        lineNumber: 209,
+        lineNumber: 210,
         columnNumber: 11
       }
     ) : /* @__PURE__ */ jsxDEV("button", { className: "stop-btn", onClick: stopRecording, disabled: isCountingDown || isInitializing, children: "\u25A0 Stop Recording" }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 217,
+      lineNumber: 218,
       columnNumber: 11
     }) }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 207,
+      lineNumber: 208,
       columnNumber: 7
     }),
     isRecording && /* @__PURE__ */ jsxDEV("div", { className: "recording-info", children: [
@@ -219,17 +219,17 @@ const RecordingSection = ({
       formatTime(videoDuration)
     ] }, void 0, true, {
       fileName: "<stdin>",
-      lineNumber: 224,
+      lineNumber: 225,
       columnNumber: 9
     }),
     status && /* @__PURE__ */ jsxDEV("div", { className: "status-message", children: status }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 230,
+      lineNumber: 231,
       columnNumber: 9
     })
   ] }, void 0, true, {
     fileName: "<stdin>",
-    lineNumber: 196,
+    lineNumber: 197,
     columnNumber: 5
   });
 };
