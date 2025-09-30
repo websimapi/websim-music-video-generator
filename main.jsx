@@ -14,15 +14,17 @@ const App = () => {
   const [videoBlob, setVideoBlob] = useState(null);
   const [videoUrl, setVideoUrl] = useState(null);
   const [status, setStatus] = useState("");
-  const [showOriginalVideo, setShowOriginalVideo] = useState(true);
-  const [showPoseTracking, setShowPoseTracking] = useState(true);
-  const [showFaceTracking, setShowFaceTracking] = useState(true);
-  const [showParticles, setShowParticles] = useState(true);
-  const [showGlow, setShowGlow] = useState(true);
-  const [brightness, setBrightness] = useState(1.1);
-  const [contrast, setContrast] = useState(1.2);
-  const [saturation, setSaturation] = useState(1.3);
-  const [blur, setBlur] = useState(0);
+  const [settings, setSettings] = useState({
+    showOriginalVideo: true,
+    showPoseTracking: true,
+    showFaceTracking: true,
+    showParticles: true,
+    showGlow: true,
+    brightness: 1.1,
+    contrast: 1.2,
+    saturation: 1.3,
+    blur: 0
+  });
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const recorderRef = useRef(null);
@@ -48,6 +50,9 @@ const App = () => {
     }
     return () => clearInterval(interval);
   }, [isRecording]);
+  const updateSetting = (key, value) => {
+    setSettings((prev) => ({ ...prev, [key]: value }));
+  };
   const handleAudioUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -116,40 +121,40 @@ const App = () => {
     /* @__PURE__ */ jsxDEV("div", { className: "header", children: [
       /* @__PURE__ */ jsxDEV("h1", { children: "Music Video Generator" }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 148,
+        lineNumber: 154,
         columnNumber: 9
       }),
       /* @__PURE__ */ jsxDEV("p", { children: "Upload music, configure settings, record yourself dancing, get an AI-enhanced music video" }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 149,
+        lineNumber: 155,
         columnNumber: 9
       })
     ] }, void 0, true, {
       fileName: "<stdin>",
-      lineNumber: 147,
+      lineNumber: 153,
       columnNumber: 7
     }),
     /* @__PURE__ */ jsxDEV("div", { className: "step-container", children: [
       /* @__PURE__ */ jsxDEV("div", { className: "step-header", children: [
         /* @__PURE__ */ jsxDEV("div", { className: "step-number", children: "1" }, void 0, false, {
           fileName: "<stdin>",
-          lineNumber: 154,
+          lineNumber: 160,
           columnNumber: 11
         }),
         /* @__PURE__ */ jsxDEV("h2", { children: "Upload Your Music" }, void 0, false, {
           fileName: "<stdin>",
-          lineNumber: 155,
+          lineNumber: 161,
           columnNumber: 11
         })
       ] }, void 0, true, {
         fileName: "<stdin>",
-        lineNumber: 153,
+        lineNumber: 159,
         columnNumber: 9
       }),
       /* @__PURE__ */ jsxDEV("div", { className: "file-upload", children: [
         /* @__PURE__ */ jsxDEV("label", { htmlFor: "audio-upload", className: "upload-btn", children: "Choose Audio File" }, void 0, false, {
           fileName: "<stdin>",
-          lineNumber: 158,
+          lineNumber: 164,
           columnNumber: 11
         }),
         /* @__PURE__ */ jsxDEV(
@@ -164,7 +169,7 @@ const App = () => {
           false,
           {
             fileName: "<stdin>",
-            lineNumber: 161,
+            lineNumber: 167,
             columnNumber: 11
           }
         ),
@@ -176,46 +181,46 @@ const App = () => {
           "s)"
         ] }, void 0, true, {
           fileName: "<stdin>",
-          lineNumber: 168,
+          lineNumber: 174,
           columnNumber: 13
         }),
         audioUrl && /* @__PURE__ */ jsxDEV("audio", { ref: audioRef, src: audioUrl, style: { display: "none" } }, void 0, false, {
           fileName: "<stdin>",
-          lineNumber: 173,
+          lineNumber: 179,
           columnNumber: 13
         })
       ] }, void 0, true, {
         fileName: "<stdin>",
-        lineNumber: 157,
+        lineNumber: 163,
         columnNumber: 9
       })
     ] }, void 0, true, {
       fileName: "<stdin>",
-      lineNumber: 152,
+      lineNumber: 158,
       columnNumber: 7
     }),
     /* @__PURE__ */ jsxDEV("div", { className: `step-container ${!audioFile ? "disabled" : ""}`, children: [
       /* @__PURE__ */ jsxDEV("div", { className: "step-header", children: [
         /* @__PURE__ */ jsxDEV("div", { className: "step-number", children: "2" }, void 0, false, {
           fileName: "<stdin>",
-          lineNumber: 180,
+          lineNumber: 186,
           columnNumber: 11
         }),
         /* @__PURE__ */ jsxDEV("h2", { children: "Configure Visual Settings" }, void 0, false, {
           fileName: "<stdin>",
-          lineNumber: 181,
+          lineNumber: 187,
           columnNumber: 11
         })
       ] }, void 0, true, {
         fileName: "<stdin>",
-        lineNumber: 179,
+        lineNumber: 185,
         columnNumber: 9
       }),
       /* @__PURE__ */ jsxDEV("div", { className: "settings-section", children: [
         /* @__PURE__ */ jsxDEV("div", { className: "settings-group", children: [
           /* @__PURE__ */ jsxDEV("h3", { children: "Tracking Features" }, void 0, false, {
             fileName: "<stdin>",
-            lineNumber: 186,
+            lineNumber: 192,
             columnNumber: 13
           }),
           /* @__PURE__ */ jsxDEV("div", { className: "setting-item", children: [
@@ -224,36 +229,36 @@ const App = () => {
                 "input",
                 {
                   type: "checkbox",
-                  checked: showOriginalVideo,
-                  onChange: (e) => setShowOriginalVideo(e.target.checked),
+                  checked: settings.showOriginalVideo,
+                  onChange: (e) => updateSetting("showOriginalVideo", e.target.checked),
                   disabled: isRecording || trackingData
                 },
                 void 0,
                 false,
                 {
                   fileName: "<stdin>",
-                  lineNumber: 190,
+                  lineNumber: 196,
                   columnNumber: 17
                 }
               ),
               /* @__PURE__ */ jsxDEV("span", { children: "Show Original Video" }, void 0, false, {
                 fileName: "<stdin>",
-                lineNumber: 196,
+                lineNumber: 202,
                 columnNumber: 17
               })
             ] }, void 0, true, {
               fileName: "<stdin>",
-              lineNumber: 189,
+              lineNumber: 195,
               columnNumber: 15
             }),
             /* @__PURE__ */ jsxDEV("p", { className: "setting-description", children: "Display the recorded video feed" }, void 0, false, {
               fileName: "<stdin>",
-              lineNumber: 198,
+              lineNumber: 204,
               columnNumber: 15
             })
           ] }, void 0, true, {
             fileName: "<stdin>",
-            lineNumber: 188,
+            lineNumber: 194,
             columnNumber: 13
           }),
           /* @__PURE__ */ jsxDEV("div", { className: "setting-item", children: [
@@ -262,36 +267,36 @@ const App = () => {
                 "input",
                 {
                   type: "checkbox",
-                  checked: showPoseTracking,
-                  onChange: (e) => setShowPoseTracking(e.target.checked),
+                  checked: settings.showPoseTracking,
+                  onChange: (e) => updateSetting("showPoseTracking", e.target.checked),
                   disabled: isRecording || trackingData
                 },
                 void 0,
                 false,
                 {
                   fileName: "<stdin>",
-                  lineNumber: 205,
+                  lineNumber: 211,
                   columnNumber: 17
                 }
               ),
               /* @__PURE__ */ jsxDEV("span", { children: "Pose Tracking Overlay" }, void 0, false, {
                 fileName: "<stdin>",
-                lineNumber: 211,
+                lineNumber: 217,
                 columnNumber: 17
               })
             ] }, void 0, true, {
               fileName: "<stdin>",
-              lineNumber: 204,
+              lineNumber: 210,
               columnNumber: 15
             }),
             /* @__PURE__ */ jsxDEV("p", { className: "setting-description", children: "Display body skeleton visualization" }, void 0, false, {
               fileName: "<stdin>",
-              lineNumber: 213,
+              lineNumber: 219,
               columnNumber: 15
             })
           ] }, void 0, true, {
             fileName: "<stdin>",
-            lineNumber: 203,
+            lineNumber: 209,
             columnNumber: 13
           }),
           /* @__PURE__ */ jsxDEV("div", { className: "setting-item", children: [
@@ -300,47 +305,47 @@ const App = () => {
                 "input",
                 {
                   type: "checkbox",
-                  checked: showFaceTracking,
-                  onChange: (e) => setShowFaceTracking(e.target.checked),
+                  checked: settings.showFaceTracking,
+                  onChange: (e) => updateSetting("showFaceTracking", e.target.checked),
                   disabled: isRecording || trackingData
                 },
                 void 0,
                 false,
                 {
                   fileName: "<stdin>",
-                  lineNumber: 220,
+                  lineNumber: 226,
                   columnNumber: 17
                 }
               ),
               /* @__PURE__ */ jsxDEV("span", { children: "Face Tracking Overlay" }, void 0, false, {
                 fileName: "<stdin>",
-                lineNumber: 226,
+                lineNumber: 232,
                 columnNumber: 17
               })
             ] }, void 0, true, {
               fileName: "<stdin>",
-              lineNumber: 219,
+              lineNumber: 225,
               columnNumber: 15
             }),
             /* @__PURE__ */ jsxDEV("p", { className: "setting-description", children: "Display facial landmark points" }, void 0, false, {
               fileName: "<stdin>",
-              lineNumber: 228,
+              lineNumber: 234,
               columnNumber: 15
             })
           ] }, void 0, true, {
             fileName: "<stdin>",
-            lineNumber: 218,
+            lineNumber: 224,
             columnNumber: 13
           })
         ] }, void 0, true, {
           fileName: "<stdin>",
-          lineNumber: 185,
+          lineNumber: 191,
           columnNumber: 11
         }),
         /* @__PURE__ */ jsxDEV("div", { className: "settings-group", children: [
           /* @__PURE__ */ jsxDEV("h3", { children: "Visual Effects" }, void 0, false, {
             fileName: "<stdin>",
-            lineNumber: 235,
+            lineNumber: 241,
             columnNumber: 13
           }),
           /* @__PURE__ */ jsxDEV("div", { className: "setting-item", children: [
@@ -349,36 +354,36 @@ const App = () => {
                 "input",
                 {
                   type: "checkbox",
-                  checked: showParticles,
-                  onChange: (e) => setShowParticles(e.target.checked),
+                  checked: settings.showParticles,
+                  onChange: (e) => updateSetting("showParticles", e.target.checked),
                   disabled: isRecording || trackingData
                 },
                 void 0,
                 false,
                 {
                   fileName: "<stdin>",
-                  lineNumber: 239,
+                  lineNumber: 245,
                   columnNumber: 17
                 }
               ),
               /* @__PURE__ */ jsxDEV("span", { children: "Particle Effects" }, void 0, false, {
                 fileName: "<stdin>",
-                lineNumber: 245,
+                lineNumber: 251,
                 columnNumber: 17
               })
             ] }, void 0, true, {
               fileName: "<stdin>",
-              lineNumber: 238,
+              lineNumber: 244,
               columnNumber: 15
             }),
             /* @__PURE__ */ jsxDEV("p", { className: "setting-description", children: "Motion-reactive particles" }, void 0, false, {
               fileName: "<stdin>",
-              lineNumber: 247,
+              lineNumber: 253,
               columnNumber: 15
             })
           ] }, void 0, true, {
             fileName: "<stdin>",
-            lineNumber: 237,
+            lineNumber: 243,
             columnNumber: 13
           }),
           /* @__PURE__ */ jsxDEV("div", { className: "setting-item", children: [
@@ -387,56 +392,56 @@ const App = () => {
                 "input",
                 {
                   type: "checkbox",
-                  checked: showGlow,
-                  onChange: (e) => setShowGlow(e.target.checked),
+                  checked: settings.showGlow,
+                  onChange: (e) => updateSetting("showGlow", e.target.checked),
                   disabled: isRecording || trackingData
                 },
                 void 0,
                 false,
                 {
                   fileName: "<stdin>",
-                  lineNumber: 254,
+                  lineNumber: 260,
                   columnNumber: 17
                 }
               ),
               /* @__PURE__ */ jsxDEV("span", { children: "Glow Effects" }, void 0, false, {
                 fileName: "<stdin>",
-                lineNumber: 260,
+                lineNumber: 266,
                 columnNumber: 17
               })
             ] }, void 0, true, {
               fileName: "<stdin>",
-              lineNumber: 253,
+              lineNumber: 259,
               columnNumber: 15
             }),
             /* @__PURE__ */ jsxDEV("p", { className: "setting-description", children: "Dynamic glow based on movement" }, void 0, false, {
               fileName: "<stdin>",
-              lineNumber: 262,
+              lineNumber: 268,
               columnNumber: 15
             })
           ] }, void 0, true, {
             fileName: "<stdin>",
-            lineNumber: 252,
+            lineNumber: 258,
             columnNumber: 13
           })
         ] }, void 0, true, {
           fileName: "<stdin>",
-          lineNumber: 234,
+          lineNumber: 240,
           columnNumber: 11
         }),
         /* @__PURE__ */ jsxDEV("div", { className: "settings-group", children: [
           /* @__PURE__ */ jsxDEV("h3", { children: "Color Adjustments" }, void 0, false, {
             fileName: "<stdin>",
-            lineNumber: 269,
+            lineNumber: 275,
             columnNumber: 13
           }),
           /* @__PURE__ */ jsxDEV("div", { className: "setting-item", children: [
             /* @__PURE__ */ jsxDEV("label", { className: "slider-label", children: [
               "Brightness: ",
-              brightness.toFixed(2)
+              settings.brightness.toFixed(2)
             ] }, void 0, true, {
               fileName: "<stdin>",
-              lineNumber: 272,
+              lineNumber: 278,
               columnNumber: 15
             }),
             /* @__PURE__ */ jsxDEV(
@@ -446,8 +451,8 @@ const App = () => {
                 min: "0.5",
                 max: "2",
                 step: "0.1",
-                value: brightness,
-                onChange: (e) => setBrightness(parseFloat(e.target.value)),
+                value: settings.brightness,
+                onChange: (e) => updateSetting("brightness", parseFloat(e.target.value)),
                 className: "slider",
                 disabled: isRecording || trackingData
               },
@@ -455,22 +460,22 @@ const App = () => {
               false,
               {
                 fileName: "<stdin>",
-                lineNumber: 275,
+                lineNumber: 281,
                 columnNumber: 15
               }
             )
           ] }, void 0, true, {
             fileName: "<stdin>",
-            lineNumber: 271,
+            lineNumber: 277,
             columnNumber: 13
           }),
           /* @__PURE__ */ jsxDEV("div", { className: "setting-item", children: [
             /* @__PURE__ */ jsxDEV("label", { className: "slider-label", children: [
               "Contrast: ",
-              contrast.toFixed(2)
+              settings.contrast.toFixed(2)
             ] }, void 0, true, {
               fileName: "<stdin>",
-              lineNumber: 288,
+              lineNumber: 294,
               columnNumber: 15
             }),
             /* @__PURE__ */ jsxDEV(
@@ -480,8 +485,8 @@ const App = () => {
                 min: "0.5",
                 max: "2",
                 step: "0.1",
-                value: contrast,
-                onChange: (e) => setContrast(parseFloat(e.target.value)),
+                value: settings.contrast,
+                onChange: (e) => updateSetting("contrast", parseFloat(e.target.value)),
                 className: "slider",
                 disabled: isRecording || trackingData
               },
@@ -489,22 +494,22 @@ const App = () => {
               false,
               {
                 fileName: "<stdin>",
-                lineNumber: 291,
+                lineNumber: 297,
                 columnNumber: 15
               }
             )
           ] }, void 0, true, {
             fileName: "<stdin>",
-            lineNumber: 287,
+            lineNumber: 293,
             columnNumber: 13
           }),
           /* @__PURE__ */ jsxDEV("div", { className: "setting-item", children: [
             /* @__PURE__ */ jsxDEV("label", { className: "slider-label", children: [
               "Saturation: ",
-              saturation.toFixed(2)
+              settings.saturation.toFixed(2)
             ] }, void 0, true, {
               fileName: "<stdin>",
-              lineNumber: 304,
+              lineNumber: 310,
               columnNumber: 15
             }),
             /* @__PURE__ */ jsxDEV(
@@ -514,8 +519,8 @@ const App = () => {
                 min: "0",
                 max: "3",
                 step: "0.1",
-                value: saturation,
-                onChange: (e) => setSaturation(parseFloat(e.target.value)),
+                value: settings.saturation,
+                onChange: (e) => updateSetting("saturation", parseFloat(e.target.value)),
                 className: "slider",
                 disabled: isRecording || trackingData
               },
@@ -523,23 +528,23 @@ const App = () => {
               false,
               {
                 fileName: "<stdin>",
-                lineNumber: 307,
+                lineNumber: 313,
                 columnNumber: 15
               }
             )
           ] }, void 0, true, {
             fileName: "<stdin>",
-            lineNumber: 303,
+            lineNumber: 309,
             columnNumber: 13
           }),
           /* @__PURE__ */ jsxDEV("div", { className: "setting-item", children: [
             /* @__PURE__ */ jsxDEV("label", { className: "slider-label", children: [
               "Blur: ",
-              blur,
+              settings.blur,
               "px"
             ] }, void 0, true, {
               fileName: "<stdin>",
-              lineNumber: 320,
+              lineNumber: 326,
               columnNumber: 15
             }),
             /* @__PURE__ */ jsxDEV(
@@ -549,8 +554,8 @@ const App = () => {
                 min: "0",
                 max: "20",
                 step: "1",
-                value: blur,
-                onChange: (e) => setBlur(parseInt(e.target.value)),
+                value: settings.blur,
+                onChange: (e) => updateSetting("blur", parseInt(e.target.value)),
                 className: "slider",
                 disabled: isRecording || trackingData
               },
@@ -558,61 +563,61 @@ const App = () => {
               false,
               {
                 fileName: "<stdin>",
-                lineNumber: 323,
+                lineNumber: 329,
                 columnNumber: 15
               }
             )
           ] }, void 0, true, {
             fileName: "<stdin>",
-            lineNumber: 319,
+            lineNumber: 325,
             columnNumber: 13
           })
         ] }, void 0, true, {
           fileName: "<stdin>",
-          lineNumber: 268,
+          lineNumber: 274,
           columnNumber: 11
         })
       ] }, void 0, true, {
         fileName: "<stdin>",
-        lineNumber: 184,
+        lineNumber: 190,
         columnNumber: 9
       })
     ] }, void 0, true, {
       fileName: "<stdin>",
-      lineNumber: 178,
+      lineNumber: 184,
       columnNumber: 7
     }),
     /* @__PURE__ */ jsxDEV("div", { className: `step-container ${!audioFile ? "disabled" : ""}`, children: [
       /* @__PURE__ */ jsxDEV("div", { className: "step-header", children: [
         /* @__PURE__ */ jsxDEV("div", { className: "step-number", children: "3" }, void 0, false, {
           fileName: "<stdin>",
-          lineNumber: 340,
+          lineNumber: 346,
           columnNumber: 11
         }),
         /* @__PURE__ */ jsxDEV("h2", { children: "Record Your Dance" }, void 0, false, {
           fileName: "<stdin>",
-          lineNumber: 341,
+          lineNumber: 347,
           columnNumber: 11
         })
       ] }, void 0, true, {
         fileName: "<stdin>",
-        lineNumber: 339,
+        lineNumber: 345,
         columnNumber: 9
       }),
       /* @__PURE__ */ jsxDEV("div", { className: "video-container", children: [
         /* @__PURE__ */ jsxDEV("video", { ref: videoRef, muted: true, playsInline: true }, void 0, false, {
           fileName: "<stdin>",
-          lineNumber: 345,
+          lineNumber: 351,
           columnNumber: 11
         }),
         /* @__PURE__ */ jsxDEV("canvas", { ref: canvasRef }, void 0, false, {
           fileName: "<stdin>",
-          lineNumber: 346,
+          lineNumber: 352,
           columnNumber: 11
         })
       ] }, void 0, true, {
         fileName: "<stdin>",
-        lineNumber: 344,
+        lineNumber: 350,
         columnNumber: 9
       }),
       /* @__PURE__ */ jsxDEV("div", { className: "recording-controls", children: !isRecording ? /* @__PURE__ */ jsxDEV(
@@ -624,7 +629,7 @@ const App = () => {
           children: [
             /* @__PURE__ */ jsxDEV("span", { children: "\u25CF" }, void 0, false, {
               fileName: "<stdin>",
-              lineNumber: 356,
+              lineNumber: 362,
               columnNumber: 15
             }),
             " Start Recording"
@@ -634,16 +639,16 @@ const App = () => {
         true,
         {
           fileName: "<stdin>",
-          lineNumber: 351,
+          lineNumber: 357,
           columnNumber: 13
         }
       ) : /* @__PURE__ */ jsxDEV("button", { className: "stop-btn", onClick: stopRecording, children: "\u25A0 Stop Recording" }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 359,
+        lineNumber: 365,
         columnNumber: 13
       }) }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 349,
+        lineNumber: 355,
         columnNumber: 9
       }),
       isRecording && /* @__PURE__ */ jsxDEV("div", { className: "recording-info", children: [
@@ -653,34 +658,34 @@ const App = () => {
         formatTime(videoDuration)
       ] }, void 0, true, {
         fileName: "<stdin>",
-        lineNumber: 366,
+        lineNumber: 372,
         columnNumber: 11
       }),
       status && /* @__PURE__ */ jsxDEV("div", { className: "status-message", children: status }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 372,
+        lineNumber: 378,
         columnNumber: 11
       })
     ] }, void 0, true, {
       fileName: "<stdin>",
-      lineNumber: 338,
+      lineNumber: 344,
       columnNumber: 7
     }),
     trackingData && videoUrl && audioUrl && /* @__PURE__ */ jsxDEV("div", { className: "step-container", children: [
       /* @__PURE__ */ jsxDEV("div", { className: "step-header", children: [
         /* @__PURE__ */ jsxDEV("div", { className: "step-number", children: "4" }, void 0, false, {
           fileName: "<stdin>",
-          lineNumber: 379,
+          lineNumber: 385,
           columnNumber: 13
         }),
         /* @__PURE__ */ jsxDEV("h2", { children: "Your Music Video" }, void 0, false, {
           fileName: "<stdin>",
-          lineNumber: 380,
+          lineNumber: 386,
           columnNumber: 13
         })
       ] }, void 0, true, {
         fileName: "<stdin>",
-        lineNumber: 378,
+        lineNumber: 384,
         columnNumber: 11
       }),
       /* @__PURE__ */ jsxDEV("div", { className: "player-container", children: /* @__PURE__ */ jsxDEV(
@@ -696,15 +701,7 @@ const App = () => {
             videoUrl,
             audioUrl,
             videoDuration,
-            showOriginalVideo,
-            showPoseTracking,
-            showFaceTracking,
-            showParticles,
-            showGlow,
-            brightness,
-            contrast,
-            saturation,
-            blur
+            ...settings
           },
           controls: true,
           loop: true,
@@ -714,27 +711,27 @@ const App = () => {
         false,
         {
           fileName: "<stdin>",
-          lineNumber: 384,
+          lineNumber: 390,
           columnNumber: 13
         }
       ) }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 383,
+        lineNumber: 389,
         columnNumber: 11
       })
     ] }, void 0, true, {
       fileName: "<stdin>",
-      lineNumber: 377,
+      lineNumber: 383,
       columnNumber: 9
     })
   ] }, void 0, true, {
     fileName: "<stdin>",
-    lineNumber: 146,
+    lineNumber: 152,
     columnNumber: 5
   });
 };
 createRoot(document.getElementById("app")).render(/* @__PURE__ */ jsxDEV(App, {}, void 0, false, {
   fileName: "<stdin>",
-  lineNumber: 416,
+  lineNumber: 414,
   columnNumber: 51
 }));

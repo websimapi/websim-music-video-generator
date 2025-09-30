@@ -19,7 +19,13 @@ body {
 .container {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 1rem;
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding: 2rem;
+  }
 }
 
 .header {
@@ -28,13 +34,19 @@ body {
 }
 
 .header h1 {
-  font-size: 3rem;
+  font-size: 2rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
   background: linear-gradient(135deg, #fff 0%, #888 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+@media (min-width: 768px) {
+  .header h1 {
+    font-size: 3rem;
+  }
 }
 
 .header p {
@@ -46,8 +58,15 @@ body {
   background: #111;
   border: 1px solid #333;
   border-radius: 8px;
-  padding: 2rem;
-  margin-bottom: 2rem;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .step-container {
+    padding: 2rem;
+    margin-bottom: 2rem;
+  }
 }
 
 .step-header {
@@ -71,8 +90,14 @@ body {
 }
 
 .step-header h2 {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   font-weight: 700;
+}
+
+@media (min-width: 768px) {
+  .step-header h2 {
+    font-size: 1.5rem;
+  }
 }
 
 .file-upload {
@@ -85,13 +110,21 @@ body {
   background: #fff;
   color: #000;
   border: none;
-  padding: 1rem 2rem;
+  padding: 0.875rem 1.5rem;
   border-radius: 4px;
   font-family: 'Space Mono', monospace;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s;
-  font-size: 1rem;
+  font-size: 0.9rem;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (min-width: 768px) {
+  .upload-btn {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+  }
 }
 
 .upload-btn:hover {
@@ -133,25 +166,42 @@ canvas {
 
 .recording-controls {
   display: flex;
-  gap: 1rem;
-  justify-content: center;
+  flex-direction: column;
+  gap: 0.75rem;
   margin-top: 1rem;
+}
+
+@media (min-width: 768px) {
+  .recording-controls {
+    flex-direction: row;
+    gap: 1rem;
+    justify-content: center;
+  }
 }
 
 .record-btn {
   background: #ff0000;
   color: #fff;
   border: none;
-  padding: 1rem 2rem;
+  padding: 0.875rem 1.5rem;
   border-radius: 4px;
   font-family: 'Space Mono', monospace;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s;
-  font-size: 1rem;
+  font-size: 0.9rem;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (min-width: 768px) {
+  .record-btn {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+  }
 }
 
 .record-btn:hover {
@@ -172,13 +222,21 @@ canvas {
   background: #333;
   color: #fff;
   border: none;
-  padding: 1rem 2rem;
+  padding: 0.875rem 1.5rem;
   border-radius: 4px;
   font-family: 'Space Mono', monospace;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s;
-  font-size: 1rem;
+  font-size: 0.9rem;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (min-width: 768px) {
+  .stop-btn {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+  }
 }
 
 .stop-btn:hover {
@@ -193,11 +251,17 @@ canvas {
 
 .player-container {
   width: 100%;
-  max-width: 540px;
+  max-width: 100%;
   margin: 0 auto;
   background: #111;
   border-radius: 8px;
   overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .player-container {
+    max-width: 540px;
+  }
 }
 
 .loading {
@@ -226,15 +290,28 @@ input[type="file"] {
 
 .settings-section {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .settings-section {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
 }
 
 .settings-group {
   background: #1a1a1a;
-  padding: 1.5rem;
+  padding: 1rem;
   border-radius: 4px;
   border: 1px solid #2a2a2a;
+}
+
+@media (min-width: 768px) {
+  .settings-group {
+    padding: 1.5rem;
+  }
 }
 
 .settings-group h3 {
@@ -262,15 +339,27 @@ input[type="file"] {
   align-items: center;
   gap: 0.75rem;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 0.9rem;
   user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  padding: 0.25rem 0;
+}
+
+@media (min-width: 768px) {
+  .toggle-label {
+    font-size: 1rem;
+  }
 }
 
 .toggle-label input[type="checkbox"] {
   width: 20px;
   height: 20px;
+  min-width: 20px;
   cursor: pointer;
   accent-color: #fff;
+  -webkit-tap-highlight-color: transparent;
+  margin: 0;
+  flex-shrink: 0;
 }
 
 .toggle-label span {
