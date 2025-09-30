@@ -1,4 +1,4 @@
-import { jsxDEV } from "react/jsx-dev-runtime";
+import { Fragment, jsxDEV } from "react/jsx-dev-runtime";
 import React, { useState, useRef, useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import { Player } from "@websim/remotion/player";
@@ -14,6 +14,11 @@ const App = () => {
   const [videoBlob, setVideoBlob] = useState(null);
   const [videoUrl, setVideoUrl] = useState(null);
   const [status, setStatus] = useState("");
+  const [showOriginalVideo, setShowOriginalVideo] = useState(true);
+  const [brightness, setBrightness] = useState(1.1);
+  const [contrast, setContrast] = useState(1.2);
+  const [saturation, setSaturation] = useState(1.3);
+  const [blur, setBlur] = useState(0);
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const recorderRef = useRef(null);
@@ -107,40 +112,40 @@ const App = () => {
     /* @__PURE__ */ jsxDEV("div", { className: "header", children: [
       /* @__PURE__ */ jsxDEV("h1", { children: "Music Video Generator" }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 137,
+        lineNumber: 144,
         columnNumber: 9
       }),
       /* @__PURE__ */ jsxDEV("p", { children: "Upload music, record yourself dancing, get an AI-enhanced music video" }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 138,
+        lineNumber: 145,
         columnNumber: 9
       })
     ] }, void 0, true, {
       fileName: "<stdin>",
-      lineNumber: 136,
+      lineNumber: 143,
       columnNumber: 7
     }),
     /* @__PURE__ */ jsxDEV("div", { className: "step-container", children: [
       /* @__PURE__ */ jsxDEV("div", { className: "step-header", children: [
         /* @__PURE__ */ jsxDEV("div", { className: "step-number", children: "1" }, void 0, false, {
           fileName: "<stdin>",
-          lineNumber: 143,
+          lineNumber: 150,
           columnNumber: 11
         }),
         /* @__PURE__ */ jsxDEV("h2", { children: "Upload Your Music" }, void 0, false, {
           fileName: "<stdin>",
-          lineNumber: 144,
+          lineNumber: 151,
           columnNumber: 11
         })
       ] }, void 0, true, {
         fileName: "<stdin>",
-        lineNumber: 142,
+        lineNumber: 149,
         columnNumber: 9
       }),
       /* @__PURE__ */ jsxDEV("div", { className: "file-upload", children: [
         /* @__PURE__ */ jsxDEV("label", { htmlFor: "audio-upload", className: "upload-btn", children: "Choose Audio File" }, void 0, false, {
           fileName: "<stdin>",
-          lineNumber: 147,
+          lineNumber: 154,
           columnNumber: 11
         }),
         /* @__PURE__ */ jsxDEV(
@@ -155,7 +160,7 @@ const App = () => {
           false,
           {
             fileName: "<stdin>",
-            lineNumber: 150,
+            lineNumber: 157,
             columnNumber: 11
           }
         ),
@@ -167,55 +172,55 @@ const App = () => {
           "s)"
         ] }, void 0, true, {
           fileName: "<stdin>",
-          lineNumber: 157,
+          lineNumber: 164,
           columnNumber: 13
         }),
         audioUrl && /* @__PURE__ */ jsxDEV("audio", { ref: audioRef, src: audioUrl, style: { display: "none" } }, void 0, false, {
           fileName: "<stdin>",
-          lineNumber: 162,
+          lineNumber: 169,
           columnNumber: 13
         })
       ] }, void 0, true, {
         fileName: "<stdin>",
-        lineNumber: 146,
+        lineNumber: 153,
         columnNumber: 9
       })
     ] }, void 0, true, {
       fileName: "<stdin>",
-      lineNumber: 141,
+      lineNumber: 148,
       columnNumber: 7
     }),
     /* @__PURE__ */ jsxDEV("div", { className: `step-container ${!audioFile ? "disabled" : ""}`, children: [
       /* @__PURE__ */ jsxDEV("div", { className: "step-header", children: [
         /* @__PURE__ */ jsxDEV("div", { className: "step-number", children: "2" }, void 0, false, {
           fileName: "<stdin>",
-          lineNumber: 169,
+          lineNumber: 176,
           columnNumber: 11
         }),
         /* @__PURE__ */ jsxDEV("h2", { children: "Record Your Dance" }, void 0, false, {
           fileName: "<stdin>",
-          lineNumber: 170,
+          lineNumber: 177,
           columnNumber: 11
         })
       ] }, void 0, true, {
         fileName: "<stdin>",
-        lineNumber: 168,
+        lineNumber: 175,
         columnNumber: 9
       }),
       /* @__PURE__ */ jsxDEV("div", { className: "video-container", children: [
         /* @__PURE__ */ jsxDEV("video", { ref: videoRef, muted: true, playsInline: true }, void 0, false, {
           fileName: "<stdin>",
-          lineNumber: 174,
+          lineNumber: 181,
           columnNumber: 11
         }),
         /* @__PURE__ */ jsxDEV("canvas", { ref: canvasRef }, void 0, false, {
           fileName: "<stdin>",
-          lineNumber: 175,
+          lineNumber: 182,
           columnNumber: 11
         })
       ] }, void 0, true, {
         fileName: "<stdin>",
-        lineNumber: 173,
+        lineNumber: 180,
         columnNumber: 9
       }),
       /* @__PURE__ */ jsxDEV("div", { className: "recording-controls", children: !isRecording ? /* @__PURE__ */ jsxDEV(
@@ -227,7 +232,7 @@ const App = () => {
           children: [
             /* @__PURE__ */ jsxDEV("span", { children: "\u25CF" }, void 0, false, {
               fileName: "<stdin>",
-              lineNumber: 185,
+              lineNumber: 192,
               columnNumber: 15
             }),
             " Start Recording"
@@ -237,16 +242,16 @@ const App = () => {
         true,
         {
           fileName: "<stdin>",
-          lineNumber: 180,
+          lineNumber: 187,
           columnNumber: 13
         }
       ) : /* @__PURE__ */ jsxDEV("button", { className: "stop-btn", onClick: stopRecording, children: "\u25A0 Stop Recording" }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 188,
+        lineNumber: 195,
         columnNumber: 13
       }) }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 178,
+        lineNumber: 185,
         columnNumber: 9
       }),
       isRecording && /* @__PURE__ */ jsxDEV("div", { className: "recording-info", children: [
@@ -256,79 +261,288 @@ const App = () => {
         formatTime(videoDuration)
       ] }, void 0, true, {
         fileName: "<stdin>",
-        lineNumber: 195,
+        lineNumber: 202,
         columnNumber: 11
       }),
       status && /* @__PURE__ */ jsxDEV("div", { className: "status-message", children: status }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 201,
+        lineNumber: 208,
         columnNumber: 11
       })
     ] }, void 0, true, {
       fileName: "<stdin>",
-      lineNumber: 167,
+      lineNumber: 174,
       columnNumber: 7
     }),
-    trackingData && videoUrl && audioUrl && /* @__PURE__ */ jsxDEV("div", { className: "step-container", children: [
-      /* @__PURE__ */ jsxDEV("div", { className: "step-header", children: [
-        /* @__PURE__ */ jsxDEV("div", { className: "step-number", children: "3" }, void 0, false, {
+    trackingData && videoUrl && audioUrl && /* @__PURE__ */ jsxDEV(Fragment, { children: [
+      /* @__PURE__ */ jsxDEV("div", { className: "step-container", children: [
+        /* @__PURE__ */ jsxDEV("div", { className: "step-header", children: [
+          /* @__PURE__ */ jsxDEV("div", { className: "step-number", children: "3" }, void 0, false, {
+            fileName: "<stdin>",
+            lineNumber: 216,
+            columnNumber: 15
+          }),
+          /* @__PURE__ */ jsxDEV("h2", { children: "Visual Settings" }, void 0, false, {
+            fileName: "<stdin>",
+            lineNumber: 217,
+            columnNumber: 15
+          })
+        ] }, void 0, true, {
           fileName: "<stdin>",
-          lineNumber: 208,
+          lineNumber: 215,
           columnNumber: 13
         }),
-        /* @__PURE__ */ jsxDEV("h2", { children: "Your Music Video" }, void 0, false, {
+        /* @__PURE__ */ jsxDEV("div", { className: "settings-grid", children: [
+          /* @__PURE__ */ jsxDEV("div", { className: "setting-item", children: [
+            /* @__PURE__ */ jsxDEV("label", { className: "toggle-label", children: [
+              /* @__PURE__ */ jsxDEV(
+                "input",
+                {
+                  type: "checkbox",
+                  checked: showOriginalVideo,
+                  onChange: (e) => setShowOriginalVideo(e.target.checked)
+                },
+                void 0,
+                false,
+                {
+                  fileName: "<stdin>",
+                  lineNumber: 223,
+                  columnNumber: 19
+                }
+              ),
+              /* @__PURE__ */ jsxDEV("span", { children: "Show Original Video" }, void 0, false, {
+                fileName: "<stdin>",
+                lineNumber: 228,
+                columnNumber: 19
+              })
+            ] }, void 0, true, {
+              fileName: "<stdin>",
+              lineNumber: 222,
+              columnNumber: 17
+            }),
+            /* @__PURE__ */ jsxDEV("p", { className: "setting-description", children: showOriginalVideo ? "Video visible with effects" : "Only tracking visualization" }, void 0, false, {
+              fileName: "<stdin>",
+              lineNumber: 230,
+              columnNumber: 17
+            })
+          ] }, void 0, true, {
+            fileName: "<stdin>",
+            lineNumber: 221,
+            columnNumber: 15
+          }),
+          /* @__PURE__ */ jsxDEV("div", { className: "setting-item", children: [
+            /* @__PURE__ */ jsxDEV("label", { className: "slider-label", children: [
+              "Brightness: ",
+              brightness.toFixed(2)
+            ] }, void 0, true, {
+              fileName: "<stdin>",
+              lineNumber: 236,
+              columnNumber: 17
+            }),
+            /* @__PURE__ */ jsxDEV(
+              "input",
+              {
+                type: "range",
+                min: "0.5",
+                max: "2",
+                step: "0.1",
+                value: brightness,
+                onChange: (e) => setBrightness(parseFloat(e.target.value)),
+                className: "slider"
+              },
+              void 0,
+              false,
+              {
+                fileName: "<stdin>",
+                lineNumber: 239,
+                columnNumber: 17
+              }
+            )
+          ] }, void 0, true, {
+            fileName: "<stdin>",
+            lineNumber: 235,
+            columnNumber: 15
+          }),
+          /* @__PURE__ */ jsxDEV("div", { className: "setting-item", children: [
+            /* @__PURE__ */ jsxDEV("label", { className: "slider-label", children: [
+              "Contrast: ",
+              contrast.toFixed(2)
+            ] }, void 0, true, {
+              fileName: "<stdin>",
+              lineNumber: 251,
+              columnNumber: 17
+            }),
+            /* @__PURE__ */ jsxDEV(
+              "input",
+              {
+                type: "range",
+                min: "0.5",
+                max: "2",
+                step: "0.1",
+                value: contrast,
+                onChange: (e) => setContrast(parseFloat(e.target.value)),
+                className: "slider"
+              },
+              void 0,
+              false,
+              {
+                fileName: "<stdin>",
+                lineNumber: 254,
+                columnNumber: 17
+              }
+            )
+          ] }, void 0, true, {
+            fileName: "<stdin>",
+            lineNumber: 250,
+            columnNumber: 15
+          }),
+          /* @__PURE__ */ jsxDEV("div", { className: "setting-item", children: [
+            /* @__PURE__ */ jsxDEV("label", { className: "slider-label", children: [
+              "Saturation: ",
+              saturation.toFixed(2)
+            ] }, void 0, true, {
+              fileName: "<stdin>",
+              lineNumber: 266,
+              columnNumber: 17
+            }),
+            /* @__PURE__ */ jsxDEV(
+              "input",
+              {
+                type: "range",
+                min: "0",
+                max: "3",
+                step: "0.1",
+                value: saturation,
+                onChange: (e) => setSaturation(parseFloat(e.target.value)),
+                className: "slider"
+              },
+              void 0,
+              false,
+              {
+                fileName: "<stdin>",
+                lineNumber: 269,
+                columnNumber: 17
+              }
+            )
+          ] }, void 0, true, {
+            fileName: "<stdin>",
+            lineNumber: 265,
+            columnNumber: 15
+          }),
+          /* @__PURE__ */ jsxDEV("div", { className: "setting-item", children: [
+            /* @__PURE__ */ jsxDEV("label", { className: "slider-label", children: [
+              "Blur: ",
+              blur,
+              "px"
+            ] }, void 0, true, {
+              fileName: "<stdin>",
+              lineNumber: 281,
+              columnNumber: 17
+            }),
+            /* @__PURE__ */ jsxDEV(
+              "input",
+              {
+                type: "range",
+                min: "0",
+                max: "20",
+                step: "1",
+                value: blur,
+                onChange: (e) => setBlur(parseInt(e.target.value)),
+                className: "slider"
+              },
+              void 0,
+              false,
+              {
+                fileName: "<stdin>",
+                lineNumber: 284,
+                columnNumber: 17
+              }
+            )
+          ] }, void 0, true, {
+            fileName: "<stdin>",
+            lineNumber: 280,
+            columnNumber: 15
+          })
+        ] }, void 0, true, {
           fileName: "<stdin>",
-          lineNumber: 209,
+          lineNumber: 220,
           columnNumber: 13
         })
       ] }, void 0, true, {
         fileName: "<stdin>",
-        lineNumber: 207,
+        lineNumber: 214,
         columnNumber: 11
       }),
-      /* @__PURE__ */ jsxDEV("div", { className: "player-container", children: /* @__PURE__ */ jsxDEV(
-        Player,
-        {
-          component: MusicVideoComposition,
-          durationInFrames: videoDuration * 30,
-          fps: 30,
-          compositionWidth: 540,
-          compositionHeight: 960,
-          inputProps: {
-            trackingData,
-            videoUrl,
-            audioUrl,
-            videoDuration
-          },
-          controls: true,
-          loop: true,
-          style: { width: "100%" }
-        },
-        void 0,
-        false,
-        {
+      /* @__PURE__ */ jsxDEV("div", { className: "step-container", children: [
+        /* @__PURE__ */ jsxDEV("div", { className: "step-header", children: [
+          /* @__PURE__ */ jsxDEV("div", { className: "step-number", children: "4" }, void 0, false, {
+            fileName: "<stdin>",
+            lineNumber: 299,
+            columnNumber: 15
+          }),
+          /* @__PURE__ */ jsxDEV("h2", { children: "Your Music Video" }, void 0, false, {
+            fileName: "<stdin>",
+            lineNumber: 300,
+            columnNumber: 15
+          })
+        ] }, void 0, true, {
           fileName: "<stdin>",
-          lineNumber: 213,
+          lineNumber: 298,
           columnNumber: 13
-        }
-      ) }, void 0, false, {
+        }),
+        /* @__PURE__ */ jsxDEV("div", { className: "player-container", children: /* @__PURE__ */ jsxDEV(
+          Player,
+          {
+            component: MusicVideoComposition,
+            durationInFrames: videoDuration * 30,
+            fps: 30,
+            compositionWidth: 540,
+            compositionHeight: 960,
+            inputProps: {
+              trackingData,
+              videoUrl,
+              audioUrl,
+              videoDuration,
+              showOriginalVideo,
+              brightness,
+              contrast,
+              saturation,
+              blur
+            },
+            controls: true,
+            loop: true,
+            style: { width: "100%" }
+          },
+          void 0,
+          false,
+          {
+            fileName: "<stdin>",
+            lineNumber: 304,
+            columnNumber: 15
+          }
+        ) }, void 0, false, {
+          fileName: "<stdin>",
+          lineNumber: 303,
+          columnNumber: 13
+        })
+      ] }, void 0, true, {
         fileName: "<stdin>",
-        lineNumber: 212,
+        lineNumber: 297,
         columnNumber: 11
       })
     ] }, void 0, true, {
       fileName: "<stdin>",
-      lineNumber: 206,
+      lineNumber: 213,
       columnNumber: 9
     })
   ] }, void 0, true, {
     fileName: "<stdin>",
-    lineNumber: 135,
+    lineNumber: 142,
     columnNumber: 5
   });
 };
 createRoot(document.getElementById("app")).render(/* @__PURE__ */ jsxDEV(App, {}, void 0, false, {
   fileName: "<stdin>",
-  lineNumber: 236,
+  lineNumber: 333,
   columnNumber: 51
 }));

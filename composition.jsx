@@ -8,7 +8,17 @@ import {
   useVideoConfig,
   interpolate
 } from "remotion";
-const MusicVideoComposition = ({ trackingData, videoUrl, audioUrl, videoDuration }) => {
+const MusicVideoComposition = ({
+  trackingData,
+  videoUrl,
+  audioUrl,
+  videoDuration,
+  showOriginalVideo = true,
+  brightness = 1.1,
+  contrast = 1.2,
+  saturation = 1.3,
+  blur = 0
+}) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const currentTime = frame / fps * 1e3;
@@ -47,8 +57,82 @@ const MusicVideoComposition = ({ trackingData, videoUrl, audioUrl, videoDuration
     }));
   }, [energy, frame]);
   const glowIntensity = interpolate(energy, [0, 1], [0, 40]);
-  return /* @__PURE__ */ jsxDEV(AbsoluteFill, { style: { background: "#000" }, children: [
-    /* @__PURE__ */ jsxDEV(AbsoluteFill, { children: /* @__PURE__ */ jsxDEV(
+  const drawPoseSkeleton = () => {
+    if (!currentTracking?.pose) return null;
+    const landmarks = currentTracking.pose;
+    const connections = [
+      [11, 13],
+      [13, 15],
+      [12, 14],
+      [14, 16],
+      // Arms
+      [11, 12],
+      [11, 23],
+      [12, 24],
+      [23, 24],
+      // Torso
+      [23, 25],
+      [25, 27],
+      [27, 29],
+      [29, 31],
+      // Left leg
+      [24, 26],
+      [26, 28],
+      [28, 30],
+      [30, 32]
+      // Right leg
+    ];
+    return /* @__PURE__ */ jsxDEV("svg", { width: "540", height: "960", style: { position: "absolute", top: 0, left: 0 }, children: [
+      connections.map(([i, j], idx) => {
+        const p1 = landmarks[i];
+        const p2 = landmarks[j];
+        if (!p1 || !p2) return null;
+        return /* @__PURE__ */ jsxDEV(
+          "line",
+          {
+            x1: p1.x * 540,
+            y1: p1.y * 960,
+            x2: p2.x * 540,
+            y2: p2.y * 960,
+            stroke: "#00ff00",
+            strokeWidth: "4",
+            strokeLinecap: "round",
+            opacity: "0.8"
+          },
+          `line-${idx}`,
+          false,
+          {
+            fileName: "<stdin>",
+            lineNumber: 97,
+            columnNumber: 13
+          }
+        );
+      }),
+      landmarks.map((landmark, idx) => /* @__PURE__ */ jsxDEV(
+        "circle",
+        {
+          cx: landmark.x * 540,
+          cy: landmark.y * 960,
+          r: "8",
+          fill: "#00ff00",
+          opacity: "0.9"
+        },
+        `joint-${idx}`,
+        false,
+        {
+          fileName: "<stdin>",
+          lineNumber: 113,
+          columnNumber: 11
+        }
+      ))
+    ] }, void 0, true, {
+      fileName: "<stdin>",
+      lineNumber: 89,
+      columnNumber: 7
+    });
+  };
+  return /* @__PURE__ */ jsxDEV(AbsoluteFill, { style: { background: showOriginalVideo ? "#000" : "#111" }, children: [
+    showOriginalVideo && /* @__PURE__ */ jsxDEV(AbsoluteFill, { children: /* @__PURE__ */ jsxDEV(
       OffthreadVideo,
       {
         src: videoUrl,
@@ -56,20 +140,25 @@ const MusicVideoComposition = ({ trackingData, videoUrl, audioUrl, videoDuration
           width: "100%",
           height: "100%",
           objectFit: "cover",
-          filter: `brightness(1.1) contrast(1.2) saturate(1.3)`
+          filter: `brightness(${brightness}) contrast(${contrast}) saturate(${saturation}) blur(${blur}px)`
         }
       },
       void 0,
       false,
       {
         fileName: "<stdin>",
-        lineNumber: 70,
-        columnNumber: 9
+        lineNumber: 131,
+        columnNumber: 11
       }
     ) }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 69,
-      columnNumber: 7
+      lineNumber: 130,
+      columnNumber: 9
+    }),
+    !showOriginalVideo && /* @__PURE__ */ jsxDEV(AbsoluteFill, { children: drawPoseSkeleton() }, void 0, false, {
+      fileName: "<stdin>",
+      lineNumber: 145,
+      columnNumber: 9
     }),
     /* @__PURE__ */ jsxDEV(
       AbsoluteFill,
@@ -83,7 +172,7 @@ const MusicVideoComposition = ({ trackingData, videoUrl, audioUrl, videoDuration
       false,
       {
         fileName: "<stdin>",
-        lineNumber: 82,
+        lineNumber: 151,
         columnNumber: 7
       }
     ),
@@ -103,16 +192,16 @@ const MusicVideoComposition = ({ trackingData, videoUrl, audioUrl, videoDuration
       false,
       {
         fileName: "<stdin>",
-        lineNumber: 93,
+        lineNumber: 162,
         columnNumber: 13
       }
     )) }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 91,
+      lineNumber: 160,
       columnNumber: 9
     }) }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 90,
+      lineNumber: 159,
       columnNumber: 7
     }),
     /* @__PURE__ */ jsxDEV(
@@ -127,18 +216,18 @@ const MusicVideoComposition = ({ trackingData, videoUrl, audioUrl, videoDuration
       false,
       {
         fileName: "<stdin>",
-        lineNumber: 109,
+        lineNumber: 178,
         columnNumber: 7
       }
     ),
     /* @__PURE__ */ jsxDEV(Audio, { src: audioUrl }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 117,
+      lineNumber: 186,
       columnNumber: 7
     })
   ] }, void 0, true, {
     fileName: "<stdin>",
-    lineNumber: 67,
+    lineNumber: 127,
     columnNumber: 5
   });
 };
