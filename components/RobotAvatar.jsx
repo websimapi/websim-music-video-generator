@@ -38,8 +38,8 @@ const RobotAvatar = ({ trackingData, currentTime }) => {
     scene.background = null;
     sceneRef.current = scene;
     const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 1e3);
-    camera.position.set(0, 1, 3);
-    camera.lookAt(0, 1, 0);
+    camera.position.set(0, 1.2, 5);
+    camera.lookAt(0, 0.8, 0);
     cameraRef.current = camera;
     const renderer = new THREE.WebGLRenderer({
       canvas: canvasRef.current,
@@ -77,8 +77,8 @@ const RobotAvatar = ({ trackingData, currentTime }) => {
           return;
         }
         const robot = gltf.scene;
-        robot.scale.set(0.8, 0.8, 0.8);
-        robot.position.set(0, 0, 0);
+        robot.scale.set(0.6, 0.6, 0.6);
+        robot.position.set(0, -0.5, 0);
         robot.traverse((child) => {
           if (child.isBone) {
             bonesRef.current[child.name] = child;
@@ -165,8 +165,8 @@ const RobotAvatar = ({ trackingData, currentTime }) => {
         x: (pose[23].x + pose[24].x) / 2,
         y: (pose[23].y + pose[24].y) / 2
       };
-      robotRef.current.position.x = (hipCenter.x - 0.5) * 4;
-      robotRef.current.position.y = (1 - hipCenter.y) * 2 - 0.5;
+      robotRef.current.position.x = (hipCenter.x - 0.5) * 2;
+      robotRef.current.position.y = (1 - hipCenter.y) * 1.5 - 0.5;
     }
     if (pose[11] && pose[12]) {
       const shoulderAngle = Math.atan2(
