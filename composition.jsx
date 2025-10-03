@@ -8,6 +8,7 @@ import {
   useVideoConfig,
   interpolate
 } from "remotion";
+import { random } from "remotion";
 const MusicVideoComposition = ({
   trackingData,
   videoUrl,
@@ -54,12 +55,18 @@ const MusicVideoComposition = ({
   }, [currentTracking]);
   const particles = useMemo(() => {
     const count = Math.floor(energy * 20);
-    return Array.from({ length: count }, (_, i) => ({
-      x: Math.random() * 540,
-      y: Math.random() * 960,
-      size: Math.random() * 10 + 5,
-      opacity: Math.random() * 0.5 + 0.3
-    }));
+    return Array.from({ length: count }, (_, i) => {
+      const rx = random(`p-x-${i}`);
+      const ry = random(`p-y-${i}`);
+      const rs = random(`p-s-${i}`);
+      const ro = random(`p-o-${i}`);
+      return {
+        x: rx * 540,
+        y: ry * 960,
+        size: rs * 10 + 5,
+        opacity: ro * 0.5 + 0.3
+      };
+    });
   }, [energy, frame]);
   const glowIntensity = interpolate(energy, [0, 1], [0, 40]);
   const drawPoseSkeleton = () => {
@@ -108,7 +115,7 @@ const MusicVideoComposition = ({
           false,
           {
             fileName: "<stdin>",
-            lineNumber: 102,
+            lineNumber: 109,
             columnNumber: 13
           }
         );
@@ -126,13 +133,13 @@ const MusicVideoComposition = ({
         false,
         {
           fileName: "<stdin>",
-          lineNumber: 118,
+          lineNumber: 125,
           columnNumber: 11
         }
       ))
     ] }, void 0, true, {
       fileName: "<stdin>",
-      lineNumber: 94,
+      lineNumber: 101,
       columnNumber: 7
     });
   };
@@ -151,12 +158,12 @@ const MusicVideoComposition = ({
       false,
       {
         fileName: "<stdin>",
-        lineNumber: 138,
+        lineNumber: 145,
         columnNumber: 11
       }
     )) }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 136,
+      lineNumber: 143,
       columnNumber: 7
     });
   };
@@ -215,7 +222,7 @@ const MusicVideoComposition = ({
             false,
             {
               fileName: "<stdin>",
-              lineNumber: 176,
+              lineNumber: 183,
               columnNumber: 19
             }
           );
@@ -233,18 +240,18 @@ const MusicVideoComposition = ({
           false,
           {
             fileName: "<stdin>",
-            lineNumber: 192,
+            lineNumber: 199,
             columnNumber: 17
           }
         ))
       ] }, `hand-${handIdx}`, true, {
         fileName: "<stdin>",
-        lineNumber: 168,
+        lineNumber: 175,
         columnNumber: 13
       });
     }) }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 156,
+      lineNumber: 163,
       columnNumber: 7
     });
   };
@@ -264,27 +271,27 @@ const MusicVideoComposition = ({
       false,
       {
         fileName: "<stdin>",
-        lineNumber: 213,
+        lineNumber: 220,
         columnNumber: 11
       }
     ) }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 212,
+      lineNumber: 219,
       columnNumber: 9
     }),
     /* @__PURE__ */ jsxDEV(AbsoluteFill, { children: drawPoseSkeleton() }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 226,
+      lineNumber: 233,
       columnNumber: 7
     }),
     /* @__PURE__ */ jsxDEV(AbsoluteFill, { children: drawFaceLandmarks() }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 231,
+      lineNumber: 238,
       columnNumber: 7
     }),
     /* @__PURE__ */ jsxDEV(AbsoluteFill, { children: drawHandLandmarks() }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 236,
+      lineNumber: 243,
       columnNumber: 7
     }),
     showGlow && /* @__PURE__ */ jsxDEV(
@@ -299,7 +306,7 @@ const MusicVideoComposition = ({
       false,
       {
         fileName: "<stdin>",
-        lineNumber: 242,
+        lineNumber: 249,
         columnNumber: 9
       }
     ),
@@ -319,16 +326,16 @@ const MusicVideoComposition = ({
       false,
       {
         fileName: "<stdin>",
-        lineNumber: 255,
+        lineNumber: 262,
         columnNumber: 15
       }
     )) }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 253,
+      lineNumber: 260,
       columnNumber: 11
     }) }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 252,
+      lineNumber: 259,
       columnNumber: 9
     }),
     showGlow && /* @__PURE__ */ jsxDEV(
@@ -343,18 +350,18 @@ const MusicVideoComposition = ({
       false,
       {
         fileName: "<stdin>",
-        lineNumber: 273,
+        lineNumber: 280,
         columnNumber: 9
       }
     ),
     /* @__PURE__ */ jsxDEV(Audio, { src: audioUrl }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 282,
+      lineNumber: 289,
       columnNumber: 7
     })
   ] }, void 0, true, {
     fileName: "<stdin>",
-    lineNumber: 209,
+    lineNumber: 216,
     columnNumber: 5
   });
 };
