@@ -260,6 +260,7 @@ const MusicVideoComposition = ({
       OffthreadVideo,
       {
         src: videoUrl,
+        crossOrigin: "anonymous",
         style: {
           width: "100%",
           height: "100%",
@@ -281,17 +282,17 @@ const MusicVideoComposition = ({
     }),
     /* @__PURE__ */ jsxDEV(AbsoluteFill, { children: drawPoseSkeleton() }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 233,
+      lineNumber: 234,
       columnNumber: 7
     }),
     /* @__PURE__ */ jsxDEV(AbsoluteFill, { children: drawFaceLandmarks() }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 238,
+      lineNumber: 239,
       columnNumber: 7
     }),
     /* @__PURE__ */ jsxDEV(AbsoluteFill, { children: drawHandLandmarks() }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 243,
+      lineNumber: 244,
       columnNumber: 7
     }),
     showGlow && /* @__PURE__ */ jsxDEV(
@@ -306,7 +307,7 @@ const MusicVideoComposition = ({
       false,
       {
         fileName: "<stdin>",
-        lineNumber: 249,
+        lineNumber: 250,
         columnNumber: 9
       }
     ),
@@ -326,16 +327,16 @@ const MusicVideoComposition = ({
       false,
       {
         fileName: "<stdin>",
-        lineNumber: 262,
+        lineNumber: 263,
         columnNumber: 15
       }
     )) }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 260,
+      lineNumber: 261,
       columnNumber: 11
     }) }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 259,
+      lineNumber: 260,
       columnNumber: 9
     }),
     showGlow && /* @__PURE__ */ jsxDEV(
@@ -350,13 +351,13 @@ const MusicVideoComposition = ({
       false,
       {
         fileName: "<stdin>",
-        lineNumber: 280,
+        lineNumber: 281,
         columnNumber: 9
       }
     ),
-    /* @__PURE__ */ jsxDEV(Audio, { src: audioUrl }, void 0, false, {
+    /* @__PURE__ */ jsxDEV(Audio, { src: audioUrl, crossOrigin: "anonymous" }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 289,
+      lineNumber: 290,
       columnNumber: 7
     })
   ] }, void 0, true, {
