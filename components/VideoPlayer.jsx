@@ -3,21 +3,29 @@ import React from "react";
 import { Player } from "@websim/remotion/player";
 import { MusicVideoComposition } from "../composition.jsx";
 const VideoPlayer = ({ trackingData, videoUrl, audioUrl, videoDuration, settings }) => {
+  const handleDownload = () => {
+    const link = document.createElement("a");
+    link.href = videoUrl;
+    link.download = `music-video-${Date.now()}.webm`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
   return /* @__PURE__ */ jsxDEV("div", { className: "step-container", children: [
     /* @__PURE__ */ jsxDEV("div", { className: "step-header", children: [
       /* @__PURE__ */ jsxDEV("div", { className: "step-number", children: "4" }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 9,
+        lineNumber: 19,
         columnNumber: 9
       }),
       /* @__PURE__ */ jsxDEV("h2", { children: "Your Music Video" }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 10,
+        lineNumber: 20,
         columnNumber: 9
       })
     ] }, void 0, true, {
       fileName: "<stdin>",
-      lineNumber: 8,
+      lineNumber: 18,
       columnNumber: 7
     }),
     /* @__PURE__ */ jsxDEV("div", { className: "player-container", children: /* @__PURE__ */ jsxDEV(
@@ -43,17 +51,37 @@ const VideoPlayer = ({ trackingData, videoUrl, audioUrl, videoDuration, settings
       false,
       {
         fileName: "<stdin>",
-        lineNumber: 14,
+        lineNumber: 24,
         columnNumber: 9
       }
     ) }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 13,
+      lineNumber: 23,
+      columnNumber: 7
+    }),
+    /* @__PURE__ */ jsxDEV("div", { className: "recording-controls", children: /* @__PURE__ */ jsxDEV(
+      "button",
+      {
+        className: "upload-btn",
+        onClick: handleDownload,
+        style: { marginTop: "1rem" },
+        children: "Download Video"
+      },
+      void 0,
+      false,
+      {
+        fileName: "<stdin>",
+        lineNumber: 44,
+        columnNumber: 9
+      }
+    ) }, void 0, false, {
+      fileName: "<stdin>",
+      lineNumber: 43,
       columnNumber: 7
     })
   ] }, void 0, true, {
     fileName: "<stdin>",
-    lineNumber: 7,
+    lineNumber: 17,
     columnNumber: 5
   });
 };
