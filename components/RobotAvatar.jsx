@@ -12,6 +12,7 @@ const RobotAvatar = ({ trackingData, currentTime }) => {
   const bonesRef = useRef({});
   const [handle] = React.useState(() => delayRender());
   const [modelLoaded, setModelLoaded] = React.useState(false);
+  const isMountedRef = useRef(true);
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   const currentTracking = useMemo(() => {
@@ -29,6 +30,7 @@ const RobotAvatar = ({ trackingData, currentTime }) => {
   }, [frame, trackingData, currentTime]);
   useEffect(() => {
     if (!canvasRef.current) return;
+    isMountedRef.current = true;
     const scene = new THREE.Scene();
     scene.background = null;
     sceneRef.current = scene;
@@ -56,6 +58,7 @@ const RobotAvatar = ({ trackingData, currentTime }) => {
     loader.load(
       "https://threejs.org/examples/models/gltf/RobotExpressive/RobotExpressive.glb",
       (gltf) => {
+        if (!isMountedRef.current) return;
         const robot = gltf.scene;
         robot.scale.set(0.8, 0.8, 0.8);
         robot.position.set(0, 0, 0);
@@ -76,11 +79,15 @@ const RobotAvatar = ({ trackingData, currentTime }) => {
       }
     );
     return () => {
-      renderer.dispose();
+      isMountedRef.current = false;
+      if (renderer) {
+        renderer.dispose();
+      }
     };
   }, [width, height, handle]);
   useEffect(() => {
-    if (!modelLoaded || !robotRef.current || !currentTracking?.pose) return;
+    if (!modelLoaded || !robotRef.current || !currentTracking?.pose || !isMountedRef.current) return;
+    if (!rendererRef.current || !sceneRef.current || !cameraRef.current) return;
     const pose = currentTracking.pose;
     const bones = bonesRef.current;
     const calculateAngle = (p1, p2, p3) => {
@@ -140,8 +147,10 @@ const RobotAvatar = ({ trackingData, currentTime }) => {
       );
       robotRef.current.rotation.z = shoulderAngle * 0.3;
     }
-    if (rendererRef.current && sceneRef.current && cameraRef.current) {
+    try {
       rendererRef.current.render(sceneRef.current, cameraRef.current);
+    } catch (error) {
+      console.error("Render error:", error);
     }
   }, [currentTracking, modelLoaded]);
   if (!modelLoaded) {
@@ -149,7 +158,7 @@ const RobotAvatar = ({ trackingData, currentTime }) => {
   }
   return /* @__PURE__ */ jsxDEV("canvas", { ref: canvasRef, style: { position: "absolute", top: 0, left: 0, width: "100%", height: "100%" } }, void 0, false, {
     fileName: "<stdin>",
-    lineNumber: 198,
+    lineNumber: 203,
     columnNumber: 10
   });
 };
