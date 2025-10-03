@@ -116,7 +116,11 @@ const RecordingSection = ({
       }
       const { trackingData: data, videoBlob: blob } = await recorderRef.current.stopRecording();
       setStatus("Uploading video...");
-      const url = await websim.upload(blob);
+      const videoFile = new File([blob], "recorded-video.webm", {
+        type: "video/webm",
+        lastModified: Date.now()
+      });
+      const url = await websim.upload(videoFile);
       const stream = videoRef.current.srcObject;
       stream.getTracks().forEach((track) => track.stop());
       videoRef.current.srcObject = null;
@@ -132,17 +136,17 @@ const RecordingSection = ({
     /* @__PURE__ */ jsxDEV("div", { className: "step-header", children: [
       /* @__PURE__ */ jsxDEV("div", { className: "step-number", children: "3" }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 171,
+        lineNumber: 179,
         columnNumber: 9
       }),
       /* @__PURE__ */ jsxDEV("h2", { children: "Record Your Dance" }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 172,
+        lineNumber: 180,
         columnNumber: 9
       })
     ] }, void 0, true, {
       fileName: "<stdin>",
-      lineNumber: 170,
+      lineNumber: 178,
       columnNumber: 7
     }),
     /* @__PURE__ */ jsxDEV("div", { className: "setting-item", style: { marginBottom: "1rem" }, children: [
@@ -152,7 +156,7 @@ const RecordingSection = ({
         " seconds"
       ] }, void 0, true, {
         fileName: "<stdin>",
-        lineNumber: 176,
+        lineNumber: 184,
         columnNumber: 9
       }),
       /* @__PURE__ */ jsxDEV(
@@ -171,34 +175,34 @@ const RecordingSection = ({
         false,
         {
           fileName: "<stdin>",
-          lineNumber: 179,
+          lineNumber: 187,
           columnNumber: 9
         }
       ),
       /* @__PURE__ */ jsxDEV("p", { className: "setting-description", children: "Time before recording and music starts (0 to skip)." }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 189,
+        lineNumber: 197,
         columnNumber: 9
       })
     ] }, void 0, true, {
       fileName: "<stdin>",
-      lineNumber: 175,
+      lineNumber: 183,
       columnNumber: 7
     }),
     /* @__PURE__ */ jsxDEV("div", { className: "video-container", children: [
       /* @__PURE__ */ jsxDEV("video", { ref: videoRef, muted: true, playsInline: true }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 195,
+        lineNumber: 203,
         columnNumber: 9
       }),
       /* @__PURE__ */ jsxDEV("canvas", { ref: canvasRef }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 196,
+        lineNumber: 204,
         columnNumber: 9
       })
     ] }, void 0, true, {
       fileName: "<stdin>",
-      lineNumber: 194,
+      lineNumber: 202,
       columnNumber: 7
     }),
     /* @__PURE__ */ jsxDEV("div", { className: "recording-controls", children: !isRecording && !isCountingDown && !isInitializing ? /* @__PURE__ */ jsxDEV(
@@ -210,7 +214,7 @@ const RecordingSection = ({
         children: [
           /* @__PURE__ */ jsxDEV("span", { children: "\u25CF" }, void 0, false, {
             fileName: "<stdin>",
-            lineNumber: 206,
+            lineNumber: 214,
             columnNumber: 13
           }),
           " Start Recording"
@@ -220,16 +224,16 @@ const RecordingSection = ({
       true,
       {
         fileName: "<stdin>",
-        lineNumber: 201,
+        lineNumber: 209,
         columnNumber: 11
       }
     ) : /* @__PURE__ */ jsxDEV("button", { className: "stop-btn", onClick: stopRecording, disabled: isCountingDown || isInitializing, children: "\u25A0 Stop Recording" }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 209,
+      lineNumber: 217,
       columnNumber: 11
     }) }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 199,
+      lineNumber: 207,
       columnNumber: 7
     }),
     isRecording && /* @__PURE__ */ jsxDEV("div", { className: "recording-info", children: [
@@ -239,17 +243,17 @@ const RecordingSection = ({
       formatTime(videoDuration)
     ] }, void 0, true, {
       fileName: "<stdin>",
-      lineNumber: 216,
+      lineNumber: 224,
       columnNumber: 9
     }),
     status && /* @__PURE__ */ jsxDEV("div", { className: "status-message", children: status }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 222,
+      lineNumber: 230,
       columnNumber: 9
     })
   ] }, void 0, true, {
     fileName: "<stdin>",
-    lineNumber: 169,
+    lineNumber: 177,
     columnNumber: 5
   });
 };
