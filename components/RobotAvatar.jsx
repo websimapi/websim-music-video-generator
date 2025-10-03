@@ -114,9 +114,9 @@ const RobotAvatar = ({ trackingData, currentTime }) => {
     };
   }, [width, height]);
   useEffect(() => {
-    if (!modelLoaded || !robotRef.current || !currentTracking?.pose || !isMountedRef.current) return;
+    if (!modelLoaded || !robotRef.current || !isMountedRef.current) return;
     if (!rendererRef.current || !sceneRef.current || !cameraRef.current) return;
-    const pose = currentTracking.pose;
+    const pose = currentTracking?.pose;
     const bones = bonesRef.current;
     const getLandmarkVector = (landmark) => {
       if (!landmark) return null;
@@ -138,6 +138,14 @@ const RobotAvatar = ({ trackingData, currentTime }) => {
         bone.rotation.set(0, 0, 0);
       }
     });
+    if (!pose) {
+      try {
+        rendererRef.current.render(sceneRef.current, cameraRef.current);
+      } catch (error) {
+        console.error("Render error:", error);
+      }
+      return;
+    }
     const leftShoulder = getLandmarkVector(pose[11]);
     const rightShoulder = getLandmarkVector(pose[12]);
     const leftHip = getLandmarkVector(pose[23]);
@@ -228,11 +236,11 @@ const RobotAvatar = ({ trackingData, currentTime }) => {
       const earCenter = new THREE.Vector3().addVectors(leftEar, rightEar).multiplyScalar(0.5);
       const headDir = new THREE.Vector3().subVectors(nose, earCenter);
       if (bones["mixamorigHead"]) {
-        bones["mixamorigHead"].rotation.x = Math.atan2(headDir.y, Math.sqrt(headDir.x ** 2 + headDir.z ** 2)) * 0.5;
+        bones["mixamorigHead"].rotation.x = Math.atan2(headDir.y, Math.sqrt(headDir.x ** 2 + headDir.z ** 2)) * 0.5 - Math.PI / 2;
         bones["mixamorigHead"].rotation.y = Math.atan2(headDir.x, headDir.z) * 0.5;
       }
       if (bones["mixamorigNeck"]) {
-        bones["mixamorigNeck"].rotation.x = Math.atan2(headDir.y, Math.sqrt(headDir.x ** 2 + headDir.z ** 2)) * 0.3;
+        bones["mixamorigNeck"].rotation.x = Math.atan2(headDir.y, Math.sqrt(headDir.x ** 2 + headDir.z ** 2)) * 0.3 - Math.PI / 2;
       }
     }
     try {
@@ -243,7 +251,7 @@ const RobotAvatar = ({ trackingData, currentTime }) => {
   }, [currentTracking, modelLoaded]);
   return /* @__PURE__ */ jsxDEV("canvas", { ref: canvasRef, style: { position: "absolute", top: 0, left: 0, width: "100%", height: "100%" } }, void 0, false, {
     fileName: "<stdin>",
-    lineNumber: 321,
+    lineNumber: 332,
     columnNumber: 10
   });
 };
