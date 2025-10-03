@@ -42,7 +42,7 @@ const VideoPlayer = ({ trackingData, videoUrl, audioUrl, videoDuration, settings
         loop: true,
         style: { width: "100%" }
       },
-      void 0,
+      `${videoUrl}-${audioUrl}-${renderDurationSeconds}`,
       false,
       {
         fileName: "<stdin>",

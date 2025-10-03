@@ -16,6 +16,7 @@ export class TrackingRecorder {
     this.settings = {};
     this.lastTimestamp = -1;
     this.baseTimestamp = 0;
+    this.isPreview = false;
   }
 
   async initialize(settings = {}) {
@@ -40,7 +41,7 @@ export class TrackingRecorder {
       minTrackingConfidence: 0.5
     });
 
-    this.faceLandmarker = await FaceLandmarker.createFromOptions(vision, {
+    this.faceLandmarker = this.settings.showFaceTracking ? await FaceLandmarker.createFromOptions(vision, {
       baseOptions: {
         modelAssetPath: "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task",
         delegate: "GPU"
@@ -50,10 +51,9 @@ export class TrackingRecorder {
       minFaceDetectionConfidence: 0.5,
       minFacePresenceConfidence: 0.5,
       minTrackingConfidence: 0.5
-    });
+    }) : null;
 
-    // Add hand tracking
-    this.handLandmarker = await HandLandmarker.createFromOptions(vision, {
+    this.handLandmarker = this.settings.showHandTracking ? await HandLandmarker.createFromOptions(vision, {
       baseOptions: {
         modelAssetPath: "https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task",
         delegate: "GPU"
@@ -63,7 +63,7 @@ export class TrackingRecorder {
       minHandDetectionConfidence: 0.5,
       minHandPresenceConfidence: 0.5,
       minTrackingConfidence: 0.5
-    });
+    }) : null;
 
     // Setup canvas
     this.canvas.width = this.video.videoWidth;
@@ -71,6 +71,7 @@ export class TrackingRecorder {
   }
 
   startRecording() {
+    this.isPreview = false;
     this.isRecording = true;
     this.trackingData = [];
     this.recordedChunks = [];
@@ -92,19 +93,15 @@ export class TrackingRecorder {
     };
 
     this.mediaRecorder.start();
-    this.processFrame();
+    this._startFrameLoop();
   }
 
-  async processFrame() {
-    if (!this.isRecording) return;
+  async processFrame(timestampMs) {
+    if (!this.isRecording && !this.isPreview) return;
 
-    const timestamp = performance.now() - this.baseTimestamp;
+    const timestamp = timestampMs ?? (performance.now() - this.baseTimestamp);
     
-    // Ensure monotonically increasing timestamps
-    if (timestamp <= this.lastTimestamp) {
-      requestAnimationFrame(() => this.processFrame());
-      return;
-    }
+    if (timestamp <= this.lastTimestamp) return;
     this.lastTimestamp = timestamp;
 
     // Draw video frame first
@@ -119,10 +116,10 @@ export class TrackingRecorder {
     const poseResults = this.poseLandmarker.detectForVideo(this.video, timestamp);
     
     // Detect face
-    const faceResults = this.faceLandmarker.detectForVideo(this.video, timestamp);
+    const faceResults = this.faceLandmarker ? this.faceLandmarker.detectForVideo(this.video, timestamp) : { faceLandmarks: [] };
     
     // Detect hands
-    const handResults = this.handLandmarker.detectForVideo(this.video, timestamp);
+    const handResults = this.handLandmarker ? this.handLandmarker.detectForVideo(this.video, timestamp) : { landmarks: [] };
 
     // Store tracking data
     this.trackingData.push({
@@ -245,5 +242,27 @@ export class TrackingRecorder {
 
       this.mediaRecorder.stop();
     });
+  }
+
+  startPreview() {
+    this.isPreview = true;
+    this._startFrameLoop();
+  }
+
+  stopPreview() {
+    this.isPreview = false;
+  }
+
+  _startFrameLoop() {
+    const cb = (_, metadata) => {
+      try {
+        this.processFrame(metadata?.mediaTime ? metadata.mediaTime * 1000 : undefined);
+      } catch (e) {
+        // swallow detection errors to keep preview smooth
+      } finally {
+        if (this.isRecording || this.isPreview) this.video.requestVideoFrameCallback(cb);
+      }
+    };
+    this.video.requestVideoFrameCallback(cb);
   }
 }
