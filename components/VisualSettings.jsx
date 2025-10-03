@@ -20,60 +20,9 @@ const VisualSettings = ({ settings, updateSetting, disabled, isLocked }) => {
     }),
     /* @__PURE__ */ jsxDEV("div", { className: "settings-section", children: [
       /* @__PURE__ */ jsxDEV("div", { className: "settings-group", children: [
-        /* @__PURE__ */ jsxDEV("h3", { children: "Recording Setup" }, void 0, false, {
-          fileName: "<stdin>",
-          lineNumber: 14,
-          columnNumber: 11
-        }),
-        /* @__PURE__ */ jsxDEV("div", { className: "setting-item", children: [
-          /* @__PURE__ */ jsxDEV("label", { className: "slider-label", children: [
-            "Countdown Duration: ",
-            countdownDuration,
-            " seconds"
-          ] }, void 0, true, {
-            fileName: "<stdin>",
-            lineNumber: 16,
-            columnNumber: 13
-          }),
-          /* @__PURE__ */ jsxDEV(
-            "input",
-            {
-              type: "range",
-              min: "0",
-              max: "10",
-              step: "1",
-              value: countdownDuration,
-              onChange: (e) => setCountdownDuration(parseInt(e.target.value)),
-              className: "slider",
-              disabled: isLocked
-            },
-            void 0,
-            false,
-            {
-              fileName: "<stdin>",
-              lineNumber: 19,
-              columnNumber: 13
-            }
-          ),
-          /* @__PURE__ */ jsxDEV("p", { className: "setting-description", children: "Time before recording and music starts (0 to skip)." }, void 0, false, {
-            fileName: "<stdin>",
-            lineNumber: 29,
-            columnNumber: 13
-          })
-        ] }, void 0, true, {
-          fileName: "<stdin>",
-          lineNumber: 15,
-          columnNumber: 11
-        })
-      ] }, void 0, true, {
-        fileName: "<stdin>",
-        lineNumber: 13,
-        columnNumber: 9
-      }),
-      /* @__PURE__ */ jsxDEV("div", { className: "settings-group", children: [
         /* @__PURE__ */ jsxDEV("h3", { children: "Tracking Features" }, void 0, false, {
           fileName: "<stdin>",
-          lineNumber: 36,
+          lineNumber: 14,
           columnNumber: 11
         }),
         /* @__PURE__ */ jsxDEV("div", { className: "setting-item", children: [
@@ -93,28 +42,28 @@ const VisualSettings = ({ settings, updateSetting, disabled, isLocked }) => {
               false,
               {
                 fileName: "<stdin>",
-                lineNumber: 40,
+                lineNumber: 18,
                 columnNumber: 15
               }
             ),
             /* @__PURE__ */ jsxDEV("span", { children: "Show Original Video" }, void 0, false, {
               fileName: "<stdin>",
-              lineNumber: 49,
+              lineNumber: 27,
               columnNumber: 15
             })
           ] }, void 0, true, {
             fileName: "<stdin>",
-            lineNumber: 39,
+            lineNumber: 17,
             columnNumber: 13
           }),
           /* @__PURE__ */ jsxDEV("p", { className: "setting-description", children: "Display the recorded video feed" }, void 0, false, {
             fileName: "<stdin>",
-            lineNumber: 51,
+            lineNumber: 29,
             columnNumber: 13
           })
         ] }, void 0, true, {
           fileName: "<stdin>",
-          lineNumber: 38,
+          lineNumber: 16,
           columnNumber: 11
         }),
         /* @__PURE__ */ jsxDEV("div", { className: "setting-item", children: [
@@ -134,28 +83,28 @@ const VisualSettings = ({ settings, updateSetting, disabled, isLocked }) => {
               false,
               {
                 fileName: "<stdin>",
-                lineNumber: 58,
+                lineNumber: 36,
                 columnNumber: 15
               }
             ),
             /* @__PURE__ */ jsxDEV("span", { children: "3D Robot Avatar" }, void 0, false, {
               fileName: "<stdin>",
-              lineNumber: 67,
+              lineNumber: 45,
               columnNumber: 15
             })
           ] }, void 0, true, {
             fileName: "<stdin>",
-            lineNumber: 57,
+            lineNumber: 35,
             columnNumber: 13
           }),
           /* @__PURE__ */ jsxDEV("p", { className: "setting-description", children: "Replace body tracking with animated 3D robot mesh" }, void 0, false, {
             fileName: "<stdin>",
-            lineNumber: 69,
+            lineNumber: 47,
             columnNumber: 13
           })
         ] }, void 0, true, {
           fileName: "<stdin>",
-          lineNumber: 56,
+          lineNumber: 34,
           columnNumber: 11
         }),
         /* @__PURE__ */ jsxDEV("div", { className: "setting-item", children: [
@@ -175,28 +124,28 @@ const VisualSettings = ({ settings, updateSetting, disabled, isLocked }) => {
               false,
               {
                 fileName: "<stdin>",
-                lineNumber: 76,
+                lineNumber: 54,
                 columnNumber: 15
               }
             ),
             /* @__PURE__ */ jsxDEV("span", { children: "Pose Tracking Overlay" }, void 0, false, {
               fileName: "<stdin>",
-              lineNumber: 85,
+              lineNumber: 63,
               columnNumber: 15
             })
           ] }, void 0, true, {
             fileName: "<stdin>",
-            lineNumber: 75,
+            lineNumber: 53,
             columnNumber: 13
           }),
           /* @__PURE__ */ jsxDEV("p", { className: "setting-description", children: "Display body skeleton visualization" }, void 0, false, {
             fileName: "<stdin>",
-            lineNumber: 87,
+            lineNumber: 65,
             columnNumber: 13
           })
         ] }, void 0, true, {
           fileName: "<stdin>",
-          lineNumber: 74,
+          lineNumber: 52,
           columnNumber: 11
         }),
         /* @__PURE__ */ jsxDEV("div", { className: "setting-item", children: [
@@ -216,28 +165,28 @@ const VisualSettings = ({ settings, updateSetting, disabled, isLocked }) => {
               false,
               {
                 fileName: "<stdin>",
-                lineNumber: 94,
+                lineNumber: 72,
                 columnNumber: 15
               }
             ),
             /* @__PURE__ */ jsxDEV("span", { children: "Face Tracking Overlay" }, void 0, false, {
               fileName: "<stdin>",
-              lineNumber: 103,
+              lineNumber: 81,
               columnNumber: 15
             })
           ] }, void 0, true, {
             fileName: "<stdin>",
-            lineNumber: 93,
+            lineNumber: 71,
             columnNumber: 13
           }),
           /* @__PURE__ */ jsxDEV("p", { className: "setting-description", children: "Display facial landmark points" }, void 0, false, {
             fileName: "<stdin>",
-            lineNumber: 105,
+            lineNumber: 83,
             columnNumber: 13
           })
         ] }, void 0, true, {
           fileName: "<stdin>",
-          lineNumber: 92,
+          lineNumber: 70,
           columnNumber: 11
         }),
         /* @__PURE__ */ jsxDEV("div", { className: "setting-item", children: [
@@ -257,39 +206,39 @@ const VisualSettings = ({ settings, updateSetting, disabled, isLocked }) => {
               false,
               {
                 fileName: "<stdin>",
-                lineNumber: 112,
+                lineNumber: 90,
                 columnNumber: 15
               }
             ),
             /* @__PURE__ */ jsxDEV("span", { children: "Hand Tracking Overlay" }, void 0, false, {
               fileName: "<stdin>",
-              lineNumber: 121,
+              lineNumber: 99,
               columnNumber: 15
             })
           ] }, void 0, true, {
             fileName: "<stdin>",
-            lineNumber: 111,
+            lineNumber: 89,
             columnNumber: 13
           }),
           /* @__PURE__ */ jsxDEV("p", { className: "setting-description", children: "Display detailed hand landmark points" }, void 0, false, {
             fileName: "<stdin>",
-            lineNumber: 123,
+            lineNumber: 101,
             columnNumber: 13
           })
         ] }, void 0, true, {
           fileName: "<stdin>",
-          lineNumber: 110,
+          lineNumber: 88,
           columnNumber: 11
         })
       ] }, void 0, true, {
         fileName: "<stdin>",
-        lineNumber: 35,
+        lineNumber: 13,
         columnNumber: 9
       }),
       /* @__PURE__ */ jsxDEV("div", { className: "settings-group", children: [
         /* @__PURE__ */ jsxDEV("h3", { children: "Visual Effects" }, void 0, false, {
           fileName: "<stdin>",
-          lineNumber: 130,
+          lineNumber: 108,
           columnNumber: 11
         }),
         /* @__PURE__ */ jsxDEV("div", { className: "setting-item", children: [
@@ -309,28 +258,28 @@ const VisualSettings = ({ settings, updateSetting, disabled, isLocked }) => {
               false,
               {
                 fileName: "<stdin>",
-                lineNumber: 134,
+                lineNumber: 112,
                 columnNumber: 15
               }
             ),
             /* @__PURE__ */ jsxDEV("span", { children: "Particle Effects" }, void 0, false, {
               fileName: "<stdin>",
-              lineNumber: 143,
+              lineNumber: 121,
               columnNumber: 15
             })
           ] }, void 0, true, {
             fileName: "<stdin>",
-            lineNumber: 133,
+            lineNumber: 111,
             columnNumber: 13
           }),
           /* @__PURE__ */ jsxDEV("p", { className: "setting-description", children: "Motion-reactive particles" }, void 0, false, {
             fileName: "<stdin>",
-            lineNumber: 145,
+            lineNumber: 123,
             columnNumber: 13
           })
         ] }, void 0, true, {
           fileName: "<stdin>",
-          lineNumber: 132,
+          lineNumber: 110,
           columnNumber: 11
         }),
         /* @__PURE__ */ jsxDEV("div", { className: "setting-item", children: [
@@ -350,39 +299,39 @@ const VisualSettings = ({ settings, updateSetting, disabled, isLocked }) => {
               false,
               {
                 fileName: "<stdin>",
-                lineNumber: 152,
+                lineNumber: 130,
                 columnNumber: 15
               }
             ),
             /* @__PURE__ */ jsxDEV("span", { children: "Glow Effects" }, void 0, false, {
               fileName: "<stdin>",
-              lineNumber: 161,
+              lineNumber: 139,
               columnNumber: 15
             })
           ] }, void 0, true, {
             fileName: "<stdin>",
-            lineNumber: 151,
+            lineNumber: 129,
             columnNumber: 13
           }),
           /* @__PURE__ */ jsxDEV("p", { className: "setting-description", children: "Dynamic glow based on movement" }, void 0, false, {
             fileName: "<stdin>",
-            lineNumber: 163,
+            lineNumber: 141,
             columnNumber: 13
           })
         ] }, void 0, true, {
           fileName: "<stdin>",
-          lineNumber: 150,
+          lineNumber: 128,
           columnNumber: 11
         })
       ] }, void 0, true, {
         fileName: "<stdin>",
-        lineNumber: 129,
+        lineNumber: 107,
         columnNumber: 9
       }),
       /* @__PURE__ */ jsxDEV("div", { className: "settings-group", children: [
         /* @__PURE__ */ jsxDEV("h3", { children: "Color Adjustments" }, void 0, false, {
           fileName: "<stdin>",
-          lineNumber: 170,
+          lineNumber: 148,
           columnNumber: 11
         }),
         /* @__PURE__ */ jsxDEV("div", { className: "setting-item", children: [
@@ -391,7 +340,7 @@ const VisualSettings = ({ settings, updateSetting, disabled, isLocked }) => {
             settings.brightness.toFixed(2)
           ] }, void 0, true, {
             fileName: "<stdin>",
-            lineNumber: 173,
+            lineNumber: 151,
             columnNumber: 13
           }),
           /* @__PURE__ */ jsxDEV(
@@ -410,13 +359,13 @@ const VisualSettings = ({ settings, updateSetting, disabled, isLocked }) => {
             false,
             {
               fileName: "<stdin>",
-              lineNumber: 176,
+              lineNumber: 154,
               columnNumber: 13
             }
           )
         ] }, void 0, true, {
           fileName: "<stdin>",
-          lineNumber: 172,
+          lineNumber: 150,
           columnNumber: 11
         }),
         /* @__PURE__ */ jsxDEV("div", { className: "setting-item", children: [
@@ -425,7 +374,7 @@ const VisualSettings = ({ settings, updateSetting, disabled, isLocked }) => {
             settings.contrast.toFixed(2)
           ] }, void 0, true, {
             fileName: "<stdin>",
-            lineNumber: 189,
+            lineNumber: 167,
             columnNumber: 13
           }),
           /* @__PURE__ */ jsxDEV(
@@ -444,13 +393,13 @@ const VisualSettings = ({ settings, updateSetting, disabled, isLocked }) => {
             false,
             {
               fileName: "<stdin>",
-              lineNumber: 192,
+              lineNumber: 170,
               columnNumber: 13
             }
           )
         ] }, void 0, true, {
           fileName: "<stdin>",
-          lineNumber: 188,
+          lineNumber: 166,
           columnNumber: 11
         }),
         /* @__PURE__ */ jsxDEV("div", { className: "setting-item", children: [
@@ -459,7 +408,7 @@ const VisualSettings = ({ settings, updateSetting, disabled, isLocked }) => {
             settings.saturation.toFixed(2)
           ] }, void 0, true, {
             fileName: "<stdin>",
-            lineNumber: 205,
+            lineNumber: 183,
             columnNumber: 13
           }),
           /* @__PURE__ */ jsxDEV(
@@ -478,13 +427,13 @@ const VisualSettings = ({ settings, updateSetting, disabled, isLocked }) => {
             false,
             {
               fileName: "<stdin>",
-              lineNumber: 208,
+              lineNumber: 186,
               columnNumber: 13
             }
           )
         ] }, void 0, true, {
           fileName: "<stdin>",
-          lineNumber: 204,
+          lineNumber: 182,
           columnNumber: 11
         }),
         /* @__PURE__ */ jsxDEV("div", { className: "setting-item", children: [
@@ -494,7 +443,7 @@ const VisualSettings = ({ settings, updateSetting, disabled, isLocked }) => {
             "px"
           ] }, void 0, true, {
             fileName: "<stdin>",
-            lineNumber: 221,
+            lineNumber: 199,
             columnNumber: 13
           }),
           /* @__PURE__ */ jsxDEV(
@@ -513,18 +462,18 @@ const VisualSettings = ({ settings, updateSetting, disabled, isLocked }) => {
             false,
             {
               fileName: "<stdin>",
-              lineNumber: 224,
+              lineNumber: 202,
               columnNumber: 13
             }
           )
         ] }, void 0, true, {
           fileName: "<stdin>",
-          lineNumber: 220,
+          lineNumber: 198,
           columnNumber: 11
         })
       ] }, void 0, true, {
         fileName: "<stdin>",
-        lineNumber: 169,
+        lineNumber: 147,
         columnNumber: 9
       })
     ] }, void 0, true, {
