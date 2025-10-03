@@ -14,6 +14,7 @@ const MusicVideoComposition = ({
   videoUrl,
   audioUrl,
   videoDuration,
+  renderDurationSeconds = videoDuration,
   showOriginalVideo = true,
   showPoseTracking = true,
   showFaceTracking = true,
@@ -28,19 +29,25 @@ const MusicVideoComposition = ({
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const currentTime = frame / fps * 1e3;
+  const timestamps = useMemo(() => trackingData?.map((t) => t.timestamp) ?? [], [trackingData]);
   const currentTracking = useMemo(() => {
-    if (!trackingData) return null;
-    let closest = trackingData[0];
-    let minDiff = Math.abs(trackingData[0].timestamp - currentTime);
-    for (let i = 1; i < trackingData.length; i++) {
-      const diff = Math.abs(trackingData[i].timestamp - currentTime);
-      if (diff < minDiff) {
-        minDiff = diff;
-        closest = trackingData[i];
+    if (!trackingData || !timestamps.length) return null;
+    const t = currentTime;
+    let lo = 0, hi = timestamps.length - 1, best = 0;
+    while (lo <= hi) {
+      const mid = lo + hi >> 1;
+      const val = timestamps[mid];
+      if (val < t) {
+        best = mid;
+        lo = mid + 1;
+      } else {
+        hi = mid - 1;
       }
     }
-    return closest;
-  }, [frame, trackingData, currentTime]);
+    const i2 = Math.min(best + 1, timestamps.length - 1);
+    const idx = Math.abs(timestamps[best] - t) <= Math.abs(timestamps[i2] - t) ? best : i2;
+    return trackingData[idx];
+  }, [currentTime, timestamps, trackingData]);
   const energy = useMemo(() => {
     if (!currentTracking?.pose) return 0;
     const landmarks = currentTracking.pose;
@@ -115,7 +122,7 @@ const MusicVideoComposition = ({
           false,
           {
             fileName: "<stdin>",
-            lineNumber: 109,
+            lineNumber: 103,
             columnNumber: 13
           }
         );
@@ -133,13 +140,13 @@ const MusicVideoComposition = ({
         false,
         {
           fileName: "<stdin>",
-          lineNumber: 125,
+          lineNumber: 119,
           columnNumber: 11
         }
       ))
     ] }, void 0, true, {
       fileName: "<stdin>",
-      lineNumber: 101,
+      lineNumber: 95,
       columnNumber: 7
     });
   };
@@ -158,12 +165,12 @@ const MusicVideoComposition = ({
       false,
       {
         fileName: "<stdin>",
-        lineNumber: 145,
+        lineNumber: 139,
         columnNumber: 11
       }
     )) }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 143,
+      lineNumber: 137,
       columnNumber: 7
     });
   };
@@ -222,7 +229,7 @@ const MusicVideoComposition = ({
             false,
             {
               fileName: "<stdin>",
-              lineNumber: 183,
+              lineNumber: 177,
               columnNumber: 19
             }
           );
@@ -240,18 +247,18 @@ const MusicVideoComposition = ({
           false,
           {
             fileName: "<stdin>",
-            lineNumber: 199,
+            lineNumber: 193,
             columnNumber: 17
           }
         ))
       ] }, `hand-${handIdx}`, true, {
         fileName: "<stdin>",
-        lineNumber: 175,
+        lineNumber: 169,
         columnNumber: 13
       });
     }) }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 163,
+      lineNumber: 157,
       columnNumber: 7
     });
   };
@@ -261,6 +268,7 @@ const MusicVideoComposition = ({
       {
         src: videoUrl,
         crossOrigin: "anonymous",
+        trimAfter: renderDurationSeconds * 30,
         style: {
           width: "100%",
           height: "100%",
@@ -272,27 +280,27 @@ const MusicVideoComposition = ({
       false,
       {
         fileName: "<stdin>",
-        lineNumber: 220,
+        lineNumber: 214,
         columnNumber: 11
       }
     ) }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 219,
+      lineNumber: 213,
       columnNumber: 9
     }),
     /* @__PURE__ */ jsxDEV(AbsoluteFill, { children: drawPoseSkeleton() }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 234,
+      lineNumber: 229,
       columnNumber: 7
     }),
     /* @__PURE__ */ jsxDEV(AbsoluteFill, { children: drawFaceLandmarks() }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 239,
+      lineNumber: 234,
       columnNumber: 7
     }),
     /* @__PURE__ */ jsxDEV(AbsoluteFill, { children: drawHandLandmarks() }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 244,
+      lineNumber: 239,
       columnNumber: 7
     }),
     showGlow && /* @__PURE__ */ jsxDEV(
@@ -307,7 +315,7 @@ const MusicVideoComposition = ({
       false,
       {
         fileName: "<stdin>",
-        lineNumber: 250,
+        lineNumber: 245,
         columnNumber: 9
       }
     ),
@@ -327,16 +335,16 @@ const MusicVideoComposition = ({
       false,
       {
         fileName: "<stdin>",
-        lineNumber: 263,
+        lineNumber: 258,
         columnNumber: 15
       }
     )) }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 261,
+      lineNumber: 256,
       columnNumber: 11
     }) }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 260,
+      lineNumber: 255,
       columnNumber: 9
     }),
     showGlow && /* @__PURE__ */ jsxDEV(
@@ -351,18 +359,18 @@ const MusicVideoComposition = ({
       false,
       {
         fileName: "<stdin>",
-        lineNumber: 281,
+        lineNumber: 276,
         columnNumber: 9
       }
     ),
-    /* @__PURE__ */ jsxDEV(Audio, { src: audioUrl, crossOrigin: "anonymous" }, void 0, false, {
+    /* @__PURE__ */ jsxDEV(Audio, { src: audioUrl, crossOrigin: "anonymous", trimAfter: renderDurationSeconds * 30 }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 290,
+      lineNumber: 285,
       columnNumber: 7
     })
   ] }, void 0, true, {
     fileName: "<stdin>",
-    lineNumber: 216,
+    lineNumber: 210,
     columnNumber: 5
   });
 };
