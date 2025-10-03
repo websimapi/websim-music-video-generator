@@ -48,6 +48,14 @@ const MusicVideoComposition = ({
     const idx = Math.abs(timestamps[best] - t) <= Math.abs(timestamps[i2] - t) ? best : i2;
     return trackingData[idx];
   }, [currentTime, timestamps, trackingData]);
+  const { pose: posePrev, face: facePrev, hands: handsPrev } = currentTracking ?? {};
+  const nextIdx = useMemo(() => Math.min(timestamps.indexOf(currentTracking?.timestamp ?? 0) + 1, timestamps.length - 1), [currentTracking, timestamps]);
+  const t0 = currentTracking?.timestamp ?? 0, t1 = timestamps[nextIdx] ?? t0, alpha = t1 > t0 ? Math.min(Math.max((currentTime - t0) / (t1 - t0), 0), 1) : 0;
+  const next = trackingData?.[nextIdx];
+  const lerp = (a, b) => a == null || b == null ? a ?? b ?? null : a.map((p, i) => b[i] ? { ...p, x: p.x + (b[i].x - p.x) * alpha, y: p.y + (b[i].y - p.y) * alpha } : p);
+  const poseToDraw = lerp(posePrev, next?.pose);
+  const faceToDraw = lerp(facePrev, next?.face);
+  const handsToDraw = handsPrev && next?.hands ? handsPrev.map((h, i) => lerp(h, next.hands[i] || h)) : handsPrev || next?.hands || [];
   const energy = useMemo(() => {
     if (!currentTracking?.pose) return 0;
     const landmarks = currentTracking.pose;
@@ -77,8 +85,8 @@ const MusicVideoComposition = ({
   }, [energy, frame]);
   const glowIntensity = interpolate(energy, [0, 1], [0, 40]);
   const drawPoseSkeleton = () => {
-    if (!showPoseTracking || !currentTracking?.pose) return null;
-    const landmarks = currentTracking.pose;
+    if (!showPoseTracking || !poseToDraw) return null;
+    const landmarks = poseToDraw;
     const connections = [
       [11, 13],
       [13, 15],
@@ -122,7 +130,7 @@ const MusicVideoComposition = ({
           false,
           {
             fileName: "<stdin>",
-            lineNumber: 103,
+            lineNumber: 112,
             columnNumber: 13
           }
         );
@@ -140,19 +148,19 @@ const MusicVideoComposition = ({
         false,
         {
           fileName: "<stdin>",
-          lineNumber: 119,
+          lineNumber: 128,
           columnNumber: 11
         }
       ))
     ] }, void 0, true, {
       fileName: "<stdin>",
-      lineNumber: 95,
+      lineNumber: 104,
       columnNumber: 7
     });
   };
   const drawFaceLandmarks = () => {
-    if (!showFaceTracking || !currentTracking?.face) return null;
-    return /* @__PURE__ */ jsxDEV("svg", { width: "540", height: "960", style: { position: "absolute", top: 0, left: 0 }, children: currentTracking.face.map((landmark, idx) => /* @__PURE__ */ jsxDEV(
+    if (!showFaceTracking || !faceToDraw) return null;
+    return /* @__PURE__ */ jsxDEV("svg", { width: "540", height: "960", style: { position: "absolute", top: 0, left: 0 }, children: faceToDraw.map((landmark, idx) => /* @__PURE__ */ jsxDEV(
       "circle",
       {
         cx: landmark.x * 540,
@@ -165,18 +173,18 @@ const MusicVideoComposition = ({
       false,
       {
         fileName: "<stdin>",
-        lineNumber: 139,
+        lineNumber: 148,
         columnNumber: 11
       }
     )) }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 137,
+      lineNumber: 146,
       columnNumber: 7
     });
   };
   const drawHandLandmarks = () => {
-    if (!showHandTracking || !currentTracking?.hands || currentTracking.hands.length === 0) return null;
-    return /* @__PURE__ */ jsxDEV("svg", { width: "540", height: "960", style: { position: "absolute", top: 0, left: 0 }, children: currentTracking.hands.map((hand, handIdx) => {
+    if (!showHandTracking || !handsToDraw || handsToDraw.length === 0) return null;
+    return /* @__PURE__ */ jsxDEV("svg", { width: "540", height: "960", style: { position: "absolute", top: 0, left: 0 }, children: handsToDraw.map((hand, handIdx) => {
       const connections = [
         [0, 1],
         [1, 2],
@@ -229,7 +237,7 @@ const MusicVideoComposition = ({
             false,
             {
               fileName: "<stdin>",
-              lineNumber: 177,
+              lineNumber: 186,
               columnNumber: 19
             }
           );
@@ -247,18 +255,18 @@ const MusicVideoComposition = ({
           false,
           {
             fileName: "<stdin>",
-            lineNumber: 193,
+            lineNumber: 202,
             columnNumber: 17
           }
         ))
       ] }, `hand-${handIdx}`, true, {
         fileName: "<stdin>",
-        lineNumber: 169,
+        lineNumber: 178,
         columnNumber: 13
       });
     }) }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 157,
+      lineNumber: 166,
       columnNumber: 7
     });
   };
@@ -280,27 +288,27 @@ const MusicVideoComposition = ({
       false,
       {
         fileName: "<stdin>",
-        lineNumber: 214,
+        lineNumber: 223,
         columnNumber: 11
       }
     ) }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 213,
+      lineNumber: 222,
       columnNumber: 9
     }),
     /* @__PURE__ */ jsxDEV(AbsoluteFill, { children: drawPoseSkeleton() }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 229,
+      lineNumber: 238,
       columnNumber: 7
     }),
     /* @__PURE__ */ jsxDEV(AbsoluteFill, { children: drawFaceLandmarks() }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 234,
+      lineNumber: 243,
       columnNumber: 7
     }),
     /* @__PURE__ */ jsxDEV(AbsoluteFill, { children: drawHandLandmarks() }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 239,
+      lineNumber: 248,
       columnNumber: 7
     }),
     showGlow && /* @__PURE__ */ jsxDEV(
@@ -315,7 +323,7 @@ const MusicVideoComposition = ({
       false,
       {
         fileName: "<stdin>",
-        lineNumber: 245,
+        lineNumber: 254,
         columnNumber: 9
       }
     ),
@@ -335,16 +343,16 @@ const MusicVideoComposition = ({
       false,
       {
         fileName: "<stdin>",
-        lineNumber: 258,
+        lineNumber: 267,
         columnNumber: 15
       }
     )) }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 256,
+      lineNumber: 265,
       columnNumber: 11
     }) }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 255,
+      lineNumber: 264,
       columnNumber: 9
     }),
     showGlow && /* @__PURE__ */ jsxDEV(
@@ -359,18 +367,18 @@ const MusicVideoComposition = ({
       false,
       {
         fileName: "<stdin>",
-        lineNumber: 276,
+        lineNumber: 285,
         columnNumber: 9
       }
     ),
     /* @__PURE__ */ jsxDEV(Audio, { src: audioUrl, crossOrigin: "anonymous", trimAfter: renderDurationSeconds * 30 }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 285,
+      lineNumber: 294,
       columnNumber: 7
     })
   ] }, void 0, true, {
     fileName: "<stdin>",
-    lineNumber: 210,
+    lineNumber: 219,
     columnNumber: 5
   });
 };
