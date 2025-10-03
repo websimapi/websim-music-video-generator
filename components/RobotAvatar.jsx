@@ -118,62 +118,122 @@ const RobotAvatar = ({ trackingData, currentTime }) => {
     if (!rendererRef.current || !sceneRef.current || !cameraRef.current) return;
     const pose = currentTracking.pose;
     const bones = bonesRef.current;
-    const calculateAngle = (p1, p2, p3) => {
-      const v1 = { x: p1.x - p2.x, y: p1.y - p2.y };
-      const v2 = { x: p3.x - p2.x, y: p3.y - p2.y };
-      const angle = Math.atan2(v2.y, v2.x) - Math.atan2(v1.y, v1.x);
-      return angle;
-    };
-    if (pose[11] && pose[13] && pose[15]) {
-      const leftArmAngle = calculateAngle(pose[11], pose[13], pose[15]);
-      if (bones["mixamorigLeftArm"]) {
-        bones["mixamorigLeftArm"].rotation.z = leftArmAngle * 0.5;
-      }
-      if (bones["mixamorigLeftForeArm"]) {
-        bones["mixamorigLeftForeArm"].rotation.z = Math.abs(leftArmAngle) * 0.3;
-      }
-    }
-    if (pose[12] && pose[14] && pose[16]) {
-      const rightArmAngle = calculateAngle(pose[12], pose[14], pose[16]);
-      if (bones["mixamorigRightArm"]) {
-        bones["mixamorigRightArm"].rotation.z = -rightArmAngle * 0.5;
-      }
-      if (bones["mixamorigRightForeArm"]) {
-        bones["mixamorigRightForeArm"].rotation.z = -Math.abs(rightArmAngle) * 0.3;
-      }
-    }
-    if (pose[23] && pose[25] && pose[27]) {
-      const leftLegAngle = calculateAngle(pose[23], pose[25], pose[27]);
-      if (bones["mixamorigLeftUpLeg"]) {
-        bones["mixamorigLeftUpLeg"].rotation.x = leftLegAngle * 0.3;
-      }
-      if (bones["mixamorigLeftLeg"]) {
-        bones["mixamorigLeftLeg"].rotation.x = Math.abs(leftLegAngle) * 0.2;
-      }
-    }
-    if (pose[24] && pose[26] && pose[28]) {
-      const rightLegAngle = calculateAngle(pose[24], pose[26], pose[28]);
-      if (bones["mixamorigRightUpLeg"]) {
-        bones["mixamorigRightUpLeg"].rotation.x = rightLegAngle * 0.3;
-      }
-      if (bones["mixamorigRightLeg"]) {
-        bones["mixamorigRightLeg"].rotation.x = Math.abs(rightLegAngle) * 0.2;
-      }
-    }
-    if (pose[23] && pose[24]) {
-      const hipCenter = {
-        x: (pose[23].x + pose[24].x) / 2,
-        y: (pose[23].y + pose[24].y) / 2
-      };
-      robotRef.current.position.x = (hipCenter.x - 0.5) * 2;
-      robotRef.current.position.y = (1 - hipCenter.y) * 1.5 - 0.5;
-    }
-    if (pose[11] && pose[12]) {
-      const shoulderAngle = Math.atan2(
-        pose[12].y - pose[11].y,
-        pose[12].x - pose[11].x
+    const getLandmarkVector = (landmark) => {
+      if (!landmark) return null;
+      return new THREE.Vector3(
+        (landmark.x - 0.5) * 2,
+        -(landmark.y - 0.5) * 2,
+        landmark.z || 0
       );
-      robotRef.current.rotation.z = shoulderAngle * 0.3;
+    };
+    const calculateRotationFromPoints = (start, end) => {
+      if (!start || !end) return null;
+      const direction = new THREE.Vector3().subVectors(end, start).normalize();
+      const euler = new THREE.Euler();
+      euler.setFromVector3(direction);
+      return euler;
+    };
+    Object.values(bones).forEach((bone) => {
+      if (bone.rotation) {
+        bone.rotation.set(0, 0, 0);
+      }
+    });
+    const leftShoulder = getLandmarkVector(pose[11]);
+    const rightShoulder = getLandmarkVector(pose[12]);
+    const leftHip = getLandmarkVector(pose[23]);
+    const rightHip = getLandmarkVector(pose[24]);
+    if (leftShoulder && rightShoulder && leftHip && rightHip) {
+      const shoulderCenter = new THREE.Vector3().addVectors(leftShoulder, rightShoulder).multiplyScalar(0.5);
+      const hipCenter = new THREE.Vector3().addVectors(leftHip, rightHip).multiplyScalar(0.5);
+      const torsoDir = new THREE.Vector3().subVectors(shoulderCenter, hipCenter).normalize();
+      const shoulderAngle = Math.atan2(rightShoulder.x - leftShoulder.x, rightShoulder.y - leftShoulder.y);
+      if (bones["mixamorigSpine"]) {
+        bones["mixamorigSpine"].rotation.x = torsoDir.y * 0.3;
+        bones["mixamorigSpine"].rotation.z = shoulderAngle * 0.2;
+      }
+      if (bones["mixamorigSpine1"]) {
+        bones["mixamorigSpine1"].rotation.x = torsoDir.y * 0.2;
+      }
+      if (bones["mixamorigSpine2"]) {
+        bones["mixamorigSpine2"].rotation.x = torsoDir.y * 0.15;
+      }
+      robotRef.current.position.set(
+        hipCenter.x * 0.8,
+        hipCenter.y * 0.8 + 0.2,
+        0
+      );
+    }
+    const leftElbow = getLandmarkVector(pose[13]);
+    const leftWrist = getLandmarkVector(pose[15]);
+    if (leftShoulder && leftElbow && leftWrist) {
+      const upperArmDir = new THREE.Vector3().subVectors(leftElbow, leftShoulder);
+      if (bones["mixamorigLeftArm"]) {
+        bones["mixamorigLeftArm"].rotation.x = Math.atan2(upperArmDir.y, Math.sqrt(upperArmDir.x ** 2 + upperArmDir.z ** 2));
+        bones["mixamorigLeftArm"].rotation.y = Math.atan2(upperArmDir.x, upperArmDir.z);
+        bones["mixamorigLeftArm"].rotation.z = -Math.PI / 6;
+      }
+      const forearmDir = new THREE.Vector3().subVectors(leftWrist, leftElbow);
+      const elbowAngle = upperArmDir.angleTo(forearmDir);
+      if (bones["mixamorigLeftForeArm"]) {
+        bones["mixamorigLeftForeArm"].rotation.y = -Math.max(0, Math.PI - elbowAngle);
+      }
+    }
+    const rightElbow = getLandmarkVector(pose[14]);
+    const rightWrist = getLandmarkVector(pose[16]);
+    if (rightShoulder && rightElbow && rightWrist) {
+      const upperArmDir = new THREE.Vector3().subVectors(rightElbow, rightShoulder);
+      if (bones["mixamorigRightArm"]) {
+        bones["mixamorigRightArm"].rotation.x = Math.atan2(upperArmDir.y, Math.sqrt(upperArmDir.x ** 2 + upperArmDir.z ** 2));
+        bones["mixamorigRightArm"].rotation.y = Math.atan2(upperArmDir.x, upperArmDir.z);
+        bones["mixamorigRightArm"].rotation.z = Math.PI / 6;
+      }
+      const forearmDir = new THREE.Vector3().subVectors(rightWrist, rightElbow);
+      const elbowAngle = upperArmDir.angleTo(forearmDir);
+      if (bones["mixamorigRightForeArm"]) {
+        bones["mixamorigRightForeArm"].rotation.y = Math.max(0, Math.PI - elbowAngle);
+      }
+    }
+    const leftKnee = getLandmarkVector(pose[25]);
+    const leftAnkle = getLandmarkVector(pose[27]);
+    if (leftHip && leftKnee && leftAnkle) {
+      const upperLegDir = new THREE.Vector3().subVectors(leftKnee, leftHip);
+      if (bones["mixamorigLeftUpLeg"]) {
+        bones["mixamorigLeftUpLeg"].rotation.x = Math.atan2(-upperLegDir.y, Math.sqrt(upperLegDir.x ** 2 + upperLegDir.z ** 2)) - Math.PI / 2;
+        bones["mixamorigLeftUpLeg"].rotation.z = Math.atan2(upperLegDir.x, upperLegDir.z) * 0.5;
+      }
+      const lowerLegDir = new THREE.Vector3().subVectors(leftAnkle, leftKnee);
+      const kneeAngle = upperLegDir.angleTo(lowerLegDir);
+      if (bones["mixamorigLeftLeg"]) {
+        bones["mixamorigLeftLeg"].rotation.x = Math.max(0, kneeAngle - Math.PI);
+      }
+    }
+    const rightKnee = getLandmarkVector(pose[26]);
+    const rightAnkle = getLandmarkVector(pose[28]);
+    if (rightHip && rightKnee && rightAnkle) {
+      const upperLegDir = new THREE.Vector3().subVectors(rightKnee, rightHip);
+      if (bones["mixamorigRightUpLeg"]) {
+        bones["mixamorigRightUpLeg"].rotation.x = Math.atan2(-upperLegDir.y, Math.sqrt(upperLegDir.x ** 2 + upperLegDir.z ** 2)) - Math.PI / 2;
+        bones["mixamorigRightUpLeg"].rotation.z = Math.atan2(upperLegDir.x, upperLegDir.z) * 0.5;
+      }
+      const lowerLegDir = new THREE.Vector3().subVectors(rightAnkle, rightKnee);
+      const kneeAngle = upperLegDir.angleTo(lowerLegDir);
+      if (bones["mixamorigRightLeg"]) {
+        bones["mixamorigRightLeg"].rotation.x = Math.max(0, kneeAngle - Math.PI);
+      }
+    }
+    const nose = getLandmarkVector(pose[0]);
+    const leftEar = getLandmarkVector(pose[7]);
+    const rightEar = getLandmarkVector(pose[8]);
+    if (nose && leftEar && rightEar) {
+      const earCenter = new THREE.Vector3().addVectors(leftEar, rightEar).multiplyScalar(0.5);
+      const headDir = new THREE.Vector3().subVectors(nose, earCenter);
+      if (bones["mixamorigHead"]) {
+        bones["mixamorigHead"].rotation.x = Math.atan2(headDir.y, Math.sqrt(headDir.x ** 2 + headDir.z ** 2)) * 0.5;
+        bones["mixamorigHead"].rotation.y = Math.atan2(headDir.x, headDir.z) * 0.5;
+      }
+      if (bones["mixamorigNeck"]) {
+        bones["mixamorigNeck"].rotation.x = Math.atan2(headDir.y, Math.sqrt(headDir.x ** 2 + headDir.z ** 2)) * 0.3;
+      }
     }
     try {
       rendererRef.current.render(sceneRef.current, cameraRef.current);
@@ -183,7 +243,7 @@ const RobotAvatar = ({ trackingData, currentTime }) => {
   }, [currentTracking, modelLoaded]);
   return /* @__PURE__ */ jsxDEV("canvas", { ref: canvasRef, style: { position: "absolute", top: 0, left: 0, width: "100%", height: "100%" } }, void 0, false, {
     fileName: "<stdin>",
-    lineNumber: 233,
+    lineNumber: 321,
     columnNumber: 10
   });
 };
