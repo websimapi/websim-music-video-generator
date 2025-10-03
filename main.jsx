@@ -26,12 +26,20 @@ const App = () => {
   const audioRef = useRef(null);
   useEffect(() => {
     if (audioFile) {
-      const url = URL.createObjectURL(audioFile);
-      setAudioUrl(url);
-      const audio = new Audio(url);
+      const tempUrl = URL.createObjectURL(audioFile);
+      const audio = new Audio(tempUrl);
       audio.addEventListener("loadedmetadata", () => {
         setVideoDuration(Math.ceil(audio.duration));
+        URL.revokeObjectURL(tempUrl);
       });
+      (async () => {
+        try {
+          const uploadedUrl = await websim.upload(audioFile);
+          setAudioUrl(uploadedUrl);
+        } catch (err) {
+          console.error("Audio upload failed:", err);
+        }
+      })();
     }
   }, [audioFile]);
   const updateSetting = (key, value) => {
@@ -49,17 +57,17 @@ const App = () => {
     /* @__PURE__ */ jsxDEV("div", { className: "header", children: [
       /* @__PURE__ */ jsxDEV("h1", { children: "Music Video Generator" }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 59,
+        lineNumber: 69,
         columnNumber: 9
       }),
       /* @__PURE__ */ jsxDEV("p", { children: "Upload music, configure settings, record yourself dancing, get an AI-enhanced music video" }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 60,
+        lineNumber: 70,
         columnNumber: 9
       })
     ] }, void 0, true, {
       fileName: "<stdin>",
-      lineNumber: 58,
+      lineNumber: 68,
       columnNumber: 7
     }),
     /* @__PURE__ */ jsxDEV(
@@ -75,7 +83,7 @@ const App = () => {
       false,
       {
         fileName: "<stdin>",
-        lineNumber: 63,
+        lineNumber: 73,
         columnNumber: 7
       }
     ),
@@ -91,7 +99,7 @@ const App = () => {
       false,
       {
         fileName: "<stdin>",
-        lineNumber: 71,
+        lineNumber: 81,
         columnNumber: 7
       }
     ),
@@ -110,7 +118,7 @@ const App = () => {
       false,
       {
         fileName: "<stdin>",
-        lineNumber: 78,
+        lineNumber: 88,
         columnNumber: 7
       }
     ),
@@ -127,18 +135,18 @@ const App = () => {
       false,
       {
         fileName: "<stdin>",
-        lineNumber: 89,
+        lineNumber: 99,
         columnNumber: 9
       }
     )
   ] }, void 0, true, {
     fileName: "<stdin>",
-    lineNumber: 57,
+    lineNumber: 67,
     columnNumber: 5
   });
 };
 createRoot(document.getElementById("app")).render(/* @__PURE__ */ jsxDEV(App, {}, void 0, false, {
   fileName: "<stdin>",
-  lineNumber: 101,
+  lineNumber: 111,
   columnNumber: 51
 }));
