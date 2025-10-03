@@ -10,9 +10,9 @@ const RobotAvatar = ({ trackingData, currentTime }) => {
   const cameraRef = useRef(null);
   const robotRef = useRef(null);
   const bonesRef = useRef({});
-  const [handle] = React.useState(() => delayRender());
   const [modelLoaded, setModelLoaded] = React.useState(false);
   const isMountedRef = useRef(true);
+  const handleRef = useRef(null);
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   const currentTracking = useMemo(() => {
@@ -31,6 +31,9 @@ const RobotAvatar = ({ trackingData, currentTime }) => {
   useEffect(() => {
     if (!canvasRef.current) return;
     isMountedRef.current = true;
+    if (!handleRef.current) {
+      handleRef.current = delayRender();
+    }
     const scene = new THREE.Scene();
     scene.background = null;
     sceneRef.current = scene;
@@ -55,10 +58,24 @@ const RobotAvatar = ({ trackingData, currentTime }) => {
     backLight.position.set(-5, 3, -5);
     scene.add(backLight);
     const loader = new GLTFLoader();
+    const loadTimeout = setTimeout(() => {
+      if (!modelLoaded && handleRef.current) {
+        console.warn("Robot model loading timed out, continuing render");
+        continueRender(handleRef.current);
+        handleRef.current = null;
+      }
+    }, 5e3);
     loader.load(
       "https://threejs.org/examples/models/gltf/RobotExpressive/RobotExpressive.glb",
       (gltf) => {
-        if (!isMountedRef.current) return;
+        clearTimeout(loadTimeout);
+        if (!isMountedRef.current) {
+          if (handleRef.current) {
+            continueRender(handleRef.current);
+            handleRef.current = null;
+          }
+          return;
+        }
         const robot = gltf.scene;
         robot.scale.set(0.8, 0.8, 0.8);
         robot.position.set(0, 0, 0);
@@ -70,12 +87,19 @@ const RobotAvatar = ({ trackingData, currentTime }) => {
         scene.add(robot);
         robotRef.current = robot;
         setModelLoaded(true);
-        continueRender(handle);
+        if (handleRef.current) {
+          continueRender(handleRef.current);
+          handleRef.current = null;
+        }
       },
       void 0,
       (error) => {
+        clearTimeout(loadTimeout);
         console.error("Error loading robot model:", error);
-        continueRender(handle);
+        if (handleRef.current) {
+          continueRender(handleRef.current);
+          handleRef.current = null;
+        }
       }
     );
     return () => {
@@ -83,8 +107,12 @@ const RobotAvatar = ({ trackingData, currentTime }) => {
       if (renderer) {
         renderer.dispose();
       }
+      if (handleRef.current) {
+        continueRender(handleRef.current);
+        handleRef.current = null;
+      }
     };
-  }, [width, height, handle]);
+  }, [width, height]);
   useEffect(() => {
     if (!modelLoaded || !robotRef.current || !currentTracking?.pose || !isMountedRef.current) return;
     if (!rendererRef.current || !sceneRef.current || !cameraRef.current) return;
@@ -153,12 +181,9 @@ const RobotAvatar = ({ trackingData, currentTime }) => {
       console.error("Render error:", error);
     }
   }, [currentTracking, modelLoaded]);
-  if (!modelLoaded) {
-    return null;
-  }
   return /* @__PURE__ */ jsxDEV("canvas", { ref: canvasRef, style: { position: "absolute", top: 0, left: 0, width: "100%", height: "100%" } }, void 0, false, {
     fileName: "<stdin>",
-    lineNumber: 203,
+    lineNumber: 233,
     columnNumber: 10
   });
 };
