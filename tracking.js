@@ -16,7 +16,6 @@ export class TrackingRecorder {
     this.settings = {};
     this.lastTimestamp = -1;
     this.baseTimestamp = 0;
-    this.lastPose = null; this.lastFace = null; this.lastHands = [];
   }
 
   async initialize(settings = {}) {
@@ -99,7 +98,7 @@ export class TrackingRecorder {
   async processFrame() {
     if (!this.isRecording) return;
 
-    const timestamp = this.video.currentTime * 1000;
+    const timestamp = performance.now() - this.baseTimestamp;
     
     // Ensure monotonically increasing timestamps
     if (timestamp <= this.lastTimestamp) {
@@ -116,15 +115,23 @@ export class TrackingRecorder {
     
     this.ctx.drawImage(this.video, 0, 0, this.canvas.width, this.canvas.height);
 
+    // Detect pose
     const poseResults = this.poseLandmarker.detectForVideo(this.video, timestamp);
+    
+    // Detect face
     const faceResults = this.faceLandmarker.detectForVideo(this.video, timestamp);
+    
+    // Detect hands
     const handResults = this.handLandmarker.detectForVideo(this.video, timestamp);
 
-    const pose = poseResults.landmarks?.[0] ?? this.lastPose ?? null;
-    const face = faceResults.faceLandmarks?.[0] ?? this.lastFace ?? null;
-    const hands = handResults.landmarks?.length ? handResults.landmarks : (this.lastHands ?? []);
-    this.lastPose = pose; this.lastFace = face; this.lastHands = hands;
-    this.trackingData.push({ timestamp, pose, face, faceBlendshapes: faceResults.faceBlendshapes?.[0] || null, hands });
+    // Store tracking data
+    this.trackingData.push({
+      timestamp,
+      pose: poseResults.landmarks?.[0] || null,
+      face: faceResults.faceLandmarks?.[0] || null,
+      faceBlendshapes: faceResults.faceBlendshapes?.[0] || null,
+      hands: handResults.landmarks || []
+    });
 
     // Draw landmarks based on settings
     this.drawLandmarks(poseResults, faceResults, handResults);
