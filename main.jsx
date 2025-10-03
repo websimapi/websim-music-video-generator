@@ -13,7 +13,6 @@ const App = () => {
   const [videoUrl, setVideoUrl] = useState(null);
   const [settings, setSettings] = useState({
     showOriginalVideo: true,
-    show3DRobot: false,
     showPoseTracking: true,
     showFaceTracking: true,
     showHandTracking: true,
@@ -50,17 +49,17 @@ const App = () => {
     /* @__PURE__ */ jsxDEV("div", { className: "header", children: [
       /* @__PURE__ */ jsxDEV("h1", { children: "Music Video Generator" }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 60,
+        lineNumber: 59,
         columnNumber: 9
       }),
       /* @__PURE__ */ jsxDEV("p", { children: "Upload music, configure settings, record yourself dancing, get an AI-enhanced music video" }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 61,
+        lineNumber: 60,
         columnNumber: 9
       })
     ] }, void 0, true, {
       fileName: "<stdin>",
-      lineNumber: 59,
+      lineNumber: 58,
       columnNumber: 7
     }),
     /* @__PURE__ */ jsxDEV(
@@ -76,7 +75,7 @@ const App = () => {
       false,
       {
         fileName: "<stdin>",
-        lineNumber: 64,
+        lineNumber: 63,
         columnNumber: 7
       }
     ),
@@ -92,7 +91,7 @@ const App = () => {
       false,
       {
         fileName: "<stdin>",
-        lineNumber: 72,
+        lineNumber: 71,
         columnNumber: 7
       }
     ),
@@ -111,7 +110,7 @@ const App = () => {
       false,
       {
         fileName: "<stdin>",
-        lineNumber: 79,
+        lineNumber: 78,
         columnNumber: 7
       }
     ),
@@ -128,18 +127,18 @@ const App = () => {
       false,
       {
         fileName: "<stdin>",
-        lineNumber: 90,
+        lineNumber: 89,
         columnNumber: 9
       }
     )
   ] }, void 0, true, {
     fileName: "<stdin>",
-    lineNumber: 58,
+    lineNumber: 57,
     columnNumber: 5
   });
 };
 createRoot(document.getElementById("app")).render(/* @__PURE__ */ jsxDEV(App, {}, void 0, false, {
   fileName: "<stdin>",
-  lineNumber: 102,
+  lineNumber: 101,
   columnNumber: 51
 }));
